@@ -4,8 +4,8 @@ except ImportError:
     from enum import IntFlag as FastEnum
 
 
-from RoomData import DoorKind, Position
-from source.dungeon.RoomObject import RoomObject, DoorObject
+from ...RoomData import DoorKind, Position
+from .RoomObject import RoomObject, DoorObject
 
 
 class Room:

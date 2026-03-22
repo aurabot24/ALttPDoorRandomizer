@@ -1,5 +1,5 @@
-from BaseClasses import RegionType, Terrain, Entrance
-from Utils import bidict
+from .BaseClasses import RegionType, Terrain, Entrance
+from .Utils import bidict
 import logging
 
 def link_overworld(world, player):

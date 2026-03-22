@@ -1,11 +1,11 @@
-import RaceRandom as random
+from ... import RaceRandom as random
 import logging
 import copy
 
 from collections import defaultdict
-from BaseClasses import RegionType
+from ...BaseClasses import RegionType
 
-from source.overworld.EntranceData import door_addresses
+from .EntranceData import door_addresses
 
 
 class EntrancePool(object):

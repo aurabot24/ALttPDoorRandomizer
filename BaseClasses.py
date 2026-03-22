@@ -10,12 +10,12 @@ try:
 except ImportError:
     from enum import IntFlag as FastEnum
 
-from source.classes.BabelFish import BabelFish
-from Utils import int16_as_bytes
-from Tables import normal_offset_table, spiral_offset_table, multiply_lookup, divisor_lookup
-from RoomData import Room
-from source.dungeon.RoomObject import RoomObject
-from source.overworld.EntranceData import door_addresses, indirect_connections
+from .source.classes.BabelFish import BabelFish
+from .Utils import int16_as_bytes
+from .Tables import normal_offset_table, spiral_offset_table, multiply_lookup, divisor_lookup
+from .RoomData import Room
+from .source.dungeon.RoomObject import RoomObject
+from .source.overworld.EntranceData import door_addresses, indirect_connections
 
 
 class World(object):
@@ -406,7 +406,7 @@ class World(object):
                         key_list += [x.name for x in dungeon.small_keys]
                     # map/compass may be required now
                     key_list += [x.name for x in dungeon.dungeon_items]
-                from Items import ItemFactory
+                from .Items import ItemFactory
                 for item in ItemFactory(key_list, p):
                     soft_collect(item)
         ret.sweep_for_events()
@@ -2271,7 +2271,7 @@ class Location(object):
         self.name = name
         self.parent_region = parent
         if forced_item is not None:
-            from Items import ItemFactory
+            from .Items import ItemFactory
             self.forced_item = ItemFactory([forced_item], player)[0]
             self.item = self.forced_item
             self.item.location = self

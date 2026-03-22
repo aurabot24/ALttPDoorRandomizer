@@ -6,8 +6,8 @@ import hashlib
 import logging
 import os
 
-import Items
-import RaceRandom as random
+from . import Items
+from . import RaceRandom as random
 import struct
 import sys
 try:
@@ -16,29 +16,29 @@ try:
 except ImportError:
     raise Exception('Could not load BPS module')
 
-from BaseClasses import ShopType, Region, Location, Door, DoorType, RegionType, LocationType
-from DoorShuffle import compass_data, DROptions, boss_indicator, dungeon_portals
-from Dungeons import dungeon_music_addresses, dungeon_table
-from Regions import location_table, shop_to_location_table, retro_shops
-from RoomData import DoorKind
-from Text import MultiByteTextMapper, CompressedTextMapper, text_addresses, Credits, TextTable
-from Text import Uncle_texts, Ganon1_texts, Ganon_Phase_3_No_Silvers_texts, TavernMan_texts, Sahasrahla2_texts
-from Text import Triforce_texts, Blind_texts, BombShop2_texts, junk_texts
-from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts
-from Text import LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts
-from Text import Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from Utils import local_path, int16_as_bytes, int32_as_bytes, snes_to_pc
-from Items import ItemFactory
-from source.overworld.EntranceData import door_addresses
-from source.overworld.EntranceShuffle2 import exit_ids, ow_prize_table
-from InitialSram import InitialSram
+from .BaseClasses import ShopType, Region, Location, Door, DoorType, RegionType, LocationType
+from .DoorShuffle import compass_data, DROptions, boss_indicator, dungeon_portals
+from .Dungeons import dungeon_music_addresses, dungeon_table
+from .Regions import location_table, shop_to_location_table, retro_shops
+from .RoomData import DoorKind
+from .Text import MultiByteTextMapper, CompressedTextMapper, text_addresses, Credits, TextTable
+from .Text import Uncle_texts, Ganon1_texts, Ganon_Phase_3_No_Silvers_texts, TavernMan_texts, Sahasrahla2_texts
+from .Text import Triforce_texts, Blind_texts, BombShop2_texts, junk_texts
+from .Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts
+from .Text import LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts
+from .Text import Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
+from .Utils import local_path, int16_as_bytes, int32_as_bytes, snes_to_pc
+from .Items import ItemFactory
+from .source.overworld.EntranceData import door_addresses
+from .source.overworld.EntranceShuffle2 import exit_ids, ow_prize_table
+from .InitialSram import InitialSram
 
-from source.classes.SFX import randomize_sfx
-from source.item.FillUtil import valid_pot_items
-from source.dungeon.EnemyList import EnemySprite, setup_enemy_dungeon_tables
-from source.dungeon.RoomObject import DoorObject
-from source.enemizer.Bossmizer import boss_writes
-from source.enemizer.Enemizer import write_enemy_shuffle_settings
+from .source.classes.SFX import randomize_sfx
+from .source.item.FillUtil import valid_pot_items
+from .source.dungeon.EnemyList import EnemySprite, setup_enemy_dungeon_tables
+from .source.dungeon.RoomObject import DoorObject
+from .source.enemizer.Bossmizer import boss_writes
+from .source.enemizer.Enemizer import write_enemy_shuffle_settings
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
@@ -154,7 +154,7 @@ class LocalRom(object):
         self.buffer.extend(bytearray([0x00] * (0x200000 - len(self.buffer))))
 
         # load randomizer patches
-        with open(local_path('data/base2current.bps'), 'rb') as stream:
+        with open(os.path.join(os.path.dirname(__file__), 'data', 'base2current.bps'), 'rb') as stream:
             bps.apply.apply_to_bytearrays(bps.io.read_bps(stream), orig_buffer, self.buffer)
 
         self.create_json_patch(orig_buffer)

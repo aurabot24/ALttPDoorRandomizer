@@ -6,8 +6,8 @@ try:
 except ImportError:
     from enum import IntFlag as FastEnum
 
-from BaseClasses import CrystalBarrier, KeyRuleType
-from Dungeons import dungeon_keys
+from ...BaseClasses import CrystalBarrier, KeyRuleType
+from ...Dungeons import dungeon_keys
 
 
 class RuleType(FastEnum):

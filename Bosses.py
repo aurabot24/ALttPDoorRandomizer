@@ -1,8 +1,8 @@
 import logging
-import RaceRandom as random
+from . import RaceRandom as random
 
-from BaseClasses import Boss, FillError
-from source.enemizer.Bossmizer import boss_adjust
+from .BaseClasses import Boss, FillError
+from .source.enemizer.Bossmizer import boss_adjust
 
 
 def BossFactory(boss, player, on_ice=False):

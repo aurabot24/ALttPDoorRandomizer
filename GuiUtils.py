@@ -3,7 +3,7 @@ import os
 import threading
 import tkinter as tk
 
-from Utils import local_path
+from .Utils import local_path
 
 def set_icon(window):
     er16 = tk.PhotoImage(file=local_path(os.path.join("data","ER16.gif")))

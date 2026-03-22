@@ -1,7 +1,7 @@
 from collections import deque
 
-from BaseClasses import CollectionState, RegionType
-from Dungeons import dungeon_table
+from ...BaseClasses import CollectionState, RegionType
+from ...Dungeons import dungeon_table
 
 
 class District(object):

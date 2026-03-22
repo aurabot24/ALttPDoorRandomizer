@@ -733,6 +733,7 @@ yaml_cache = {}
 
 def load_cached_yaml(path_list):
     path = os.path.join(*path_list)
+    print(f'DEBUG: Loading yaml from {path}, generated from {path_list}')
     if path in yaml_cache:
         return yaml_cache[path]
     else:

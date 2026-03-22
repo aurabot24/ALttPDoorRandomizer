@@ -7,9 +7,9 @@ from yaml.representer import Representer
 from collections import defaultdict
 from pathlib import Path
 
-import RaceRandom as random
-from BaseClasses import LocationType, DoorType
-from source.tools.MysteryUtils import roll_settings, get_weights
+from ... import RaceRandom as random
+from ...BaseClasses import LocationType, DoorType
+from ..tools.MysteryUtils import roll_settings, get_weights
 
 
 class CustomSettings(object):

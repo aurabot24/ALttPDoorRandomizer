@@ -3,46 +3,46 @@ from itertools import zip_longest
 import json
 import logging
 import os
-import RaceRandom as random
+from . import RaceRandom as random
 import string
 import time
 import zlib
 import base64
 
-from BaseClasses import World, CollectionState, Item, Region, Location, Shop, Entrance, Settings
-from Bosses import place_bosses
-from Items import ItemFactory
-from KeyDoorShuffle import validate_key_placement
-from OverworldGlitchRules import create_owg_connections
-from PotShuffle import shuffle_pots, shuffle_pot_switches
-from Regions import create_regions, create_shops, mark_light_dark_world_regions, create_dungeon_regions, adjust_locations
-from OverworldShuffle import link_overworld, create_dynamic_exits
-from Rom import patch_rom, patch_race_rom, apply_rom_settings, LocalRom, JsonRom, get_hash_string
-from Doors import create_doors
-from DoorShuffle import link_doors, connect_portal, link_doors_prep
-from RoomData import create_rooms
-from Rules import set_rules
-from Dungeons import create_dungeons
-from Fill import distribute_items_restrictive, promote_dungeon_items, fill_dungeons_restrictive, ensure_good_items
-from Fill import dungeon_tracking
-from Fill import sell_potions, sell_keys, balance_multiworld_progression, balance_money_progression, lock_shop_locations
-from ItemList import generate_itempool, difficulties, fill_prizes, customize_shops, fill_specific_items
-from UnderworldGlitchRules import connect_hmg_entrances_regions, create_hmg_entrances_regions
-from Utils import output_path, parse_player_names
+from .BaseClasses import World, CollectionState, Item, Region, Location, Shop, Entrance, Settings
+from .Bosses import place_bosses
+from .Items import ItemFactory
+from .KeyDoorShuffle import validate_key_placement
+from .OverworldGlitchRules import create_owg_connections
+from .PotShuffle import shuffle_pots, shuffle_pot_switches
+from .Regions import create_regions, create_shops, mark_light_dark_world_regions, create_dungeon_regions, adjust_locations
+from .OverworldShuffle import link_overworld, create_dynamic_exits
+from .Rom import patch_rom, patch_race_rom, apply_rom_settings, LocalRom, JsonRom, get_hash_string
+from .Doors import create_doors
+from .DoorShuffle import link_doors, connect_portal, link_doors_prep
+from .RoomData import create_rooms
+from .Rules import set_rules
+from .Dungeons import create_dungeons
+from .Fill import distribute_items_restrictive, promote_dungeon_items, fill_dungeons_restrictive, ensure_good_items
+from .Fill import dungeon_tracking
+from .Fill import sell_potions, sell_keys, balance_multiworld_progression, balance_money_progression, lock_shop_locations
+from .ItemList import generate_itempool, difficulties, fill_prizes, customize_shops, fill_specific_items
+from .UnderworldGlitchRules import connect_hmg_entrances_regions, create_hmg_entrances_regions
+from .Utils import output_path, parse_player_names
 
-from source.item.FillUtil import create_item_pool_config, massage_item_pool, district_item_pool_config, verify_item_pool_config
-from source.overworld.EntranceShuffle2 import link_entrances_new
-from source.tools.BPS import create_bps_from_data
-from source.classes.CustomSettings import CustomSettings
-from source.enemizer.DamageTables import DamageTable
-from source.enemizer.Enemizer import randomize_enemies
-from source.rom.DataTables import init_data_tables
+from .source.item.FillUtil import create_item_pool_config, massage_item_pool, district_item_pool_config, verify_item_pool_config
+from .source.overworld.EntranceShuffle2 import link_entrances_new
+from .source.tools.BPS import create_bps_from_data
+from .source.classes.CustomSettings import CustomSettings
+from .source.enemizer.DamageTables import DamageTable
+from .source.enemizer.Enemizer import randomize_enemies
+from .source.rom.DataTables import init_data_tables
 
 version_number = '1.5.6'
 version_branch = '-u'
 __version__ = f'{version_number}{version_branch}'
 
-from source.classes.BabelFish import BabelFish
+from .source.classes.BabelFish import BabelFish
 
 
 class EnemizerError(RuntimeError):

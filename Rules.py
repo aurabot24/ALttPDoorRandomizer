@@ -2,18 +2,18 @@ import collections
 import logging
 from collections import deque
 
-import OverworldGlitchRules
-from BaseClasses import CollectionState, RegionType, DoorType, Entrance, CrystalBarrier, KeyRuleType, LocationType
-from BaseClasses import PotFlags
-from Dungeons import dungeon_table
-from RoomData import DoorKind
-from OverworldGlitchRules import overworld_glitches_rules
-from UnderworldGlitchRules import underworld_glitches_rules
+from . import OverworldGlitchRules
+from .BaseClasses import CollectionState, RegionType, DoorType, Entrance, CrystalBarrier, KeyRuleType, LocationType
+from .BaseClasses import PotFlags
+from .Dungeons import dungeon_table
+from .RoomData import DoorKind
+from .OverworldGlitchRules import overworld_glitches_rules
+from .UnderworldGlitchRules import underworld_glitches_rules
 
-from source.logic.Rule import RuleFactory
-from source.dungeon.EnemyList import EnemySprite, Sprite
-from source.enemizer.EnemyLogic import special_rules_check, special_rules_for_region, defeat_rule_single
-from source.enemizer.EnemyLogic import defeat_rule_multiple, and_rule as and_rule_new, or_rule as or_rule_new
+from .source.logic.Rule import RuleFactory
+from .source.dungeon.EnemyList import EnemySprite, Sprite
+from .source.enemizer.EnemyLogic import special_rules_check, special_rules_for_region, defeat_rule_single
+from .source.enemizer.EnemyLogic import defeat_rule_multiple, and_rule as and_rule_new, or_rule as or_rule_new
 
 
 def set_rules(world, player):

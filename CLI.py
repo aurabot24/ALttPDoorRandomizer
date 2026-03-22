@@ -6,10 +6,10 @@ import textwrap
 import shlex
 import sys
 
-from source.classes.BabelFish import BabelFish
+from .source.classes.BabelFish import BabelFish
 
-from Utils import update_deprecated_args
-from source.classes.CustomSettings import CustomSettings
+from .Utils import update_deprecated_args
+from .source.classes.CustomSettings import CustomSettings
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):

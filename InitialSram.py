@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from BaseClasses import CollectionState
-from Utils import count_set_bits
+from .BaseClasses import CollectionState
+from .Utils import count_set_bits
 
 SRAM_SIZE = 0x500
 ROOM_DATA = 0x000

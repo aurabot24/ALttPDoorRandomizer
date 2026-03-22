@@ -1,9 +1,9 @@
 import logging
 from collections import defaultdict
-import RaceRandom as random
+from ... import RaceRandom as random
 
-from source.dungeon.EnemyList import EnemySprite, SpriteType, enemy_names, sprite_translation, overlord_names
-from source.dungeon.RoomConstants import *
+from ..dungeon.EnemyList import EnemySprite, SpriteType, enemy_names, sprite_translation, overlord_names
+from ..dungeon.RoomConstants import *
 
 
 class SpriteRequirement:

@@ -1,5 +1,5 @@
 from enum import Enum, unique
-from Tables import door_pair_offset_table
+from .Tables import door_pair_offset_table
 
 
 def create_rooms(world, player):

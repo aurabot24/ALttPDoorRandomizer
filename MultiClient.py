@@ -8,12 +8,12 @@ import shlex
 import urllib.parse
 import websockets
 
-from BaseClasses import PotItem, PotFlags, LocationType
-import Items
-import Regions
-import PotShuffle
-import source.dungeon.EnemyList as EnemyList
-import source.rom.DataTables as DataTables
+from .BaseClasses import PotItem, PotFlags, LocationType
+from . import Items
+from . import Regions
+from . import PotShuffle
+from .source.dungeon import EnemyList
+from .source.rom import DataTables
 
 
 class ReceivedItem:

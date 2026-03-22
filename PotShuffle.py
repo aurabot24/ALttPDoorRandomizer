@@ -1,11 +1,11 @@
-import RaceRandom as random
+from . import RaceRandom as random
 
 from collections import defaultdict
 
-from BaseClasses import PotItem, Pot, PotFlags, CrystalBarrier, LocationType, RegionType
-from Utils import int16_as_bytes, pc_to_snes, snes_to_pc
+from .BaseClasses import PotItem, Pot, PotFlags, CrystalBarrier, LocationType, RegionType
+from .Utils import int16_as_bytes, pc_to_snes, snes_to_pc
 
-from source.dungeon.RoomObject import RoomObject, Shuffled_Pot
+from .source.dungeon.RoomObject import RoomObject, Shuffled_Pot
 
 movable_switch_rooms = defaultdict(lambda: [],
                                    {'PoD Stalfos Basement': ['PoD Basement Ledge'],

@@ -1,11 +1,11 @@
 from tkinter import ttk, filedialog, StringVar, Button, Entry, Frame, Label, E, W, LEFT, X, Text, Tk, INSERT
-import source.classes.diags as diagnostics
-import source.gui.widgets as widgets
+from ...classes import diags as diagnostics
+from ..widgets import *
 import json
 import os
 from functools import partial
-from source.classes.Empty import Empty
-from Main import __version__
+from ...classes.Empty import Empty
+from ....Main import __version__
 
 def generation_page(parent,settings):
     # Generation Setup
