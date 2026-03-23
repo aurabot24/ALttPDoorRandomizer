@@ -44,18 +44,17 @@ class DataTables:
         self.ow_enemy_denials = {}
         self.uw_enemy_drop_denials = {}
         self.sheet_choices = []
-        enemizer_dir = os.path.join(Path(__file__).resolve().parent.parent, 'enemizer')
-        denial_data = load_cached_yaml([enemizer_dir, 'enemy_deny.yaml'])
+        denial_data = load_cached_yaml('source/enemizer/enemy_deny.yaml')
         for denial in denial_data['UwGeneralDeny']:
             self.uw_enemy_denials[denial[0], denial[1]] = {sprite_translation[x] for x in denial[2]}
         for denial in denial_data['OwGeneralDeny']:
             self.ow_enemy_denials[denial[0], denial[1]] = {sprite_translation[x] for x in denial[2]}
         for denial in denial_data['UwEnemyDrop']:
             self.uw_enemy_drop_denials[denial[0], denial[1]] = {sprite_translation[x] for x in denial[2]}
-        weights = load_cached_yaml([enemizer_dir, 'enemy_weight.yaml'])
+        weights = load_cached_yaml('source/enemizer/enemy_weight.yaml')
         self.uw_weights = {sprite_translation[k]: v for k, v in weights['UW'].items()}
         self.ow_weights = {sprite_translation[k]: v for k, v in weights['OW'].items()}
-        sheet_weights = load_cached_yaml([enemizer_dir, 'sheet_weight.yaml'])
+        sheet_weights = load_cached_yaml('source/enemizer/sheet_weight.yaml')
         for item in sheet_weights['SheetChoices']:
             choice = SheetChoice(tuple(item['slots']), item['assignments'], item['weight'])
             self.sheet_choices.append(choice)

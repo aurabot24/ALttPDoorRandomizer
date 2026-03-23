@@ -10,11 +10,6 @@ from . import Items
 from . import RaceRandom as random
 import struct
 import sys
-try:
-    import bps.apply
-    import bps.io
-except ImportError:
-    raise Exception('Could not load BPS module')
 
 from .BaseClasses import ShopType, Region, Location, Door, DoorType, RegionType, LocationType
 from .DoorShuffle import compass_data, DROptions, boss_indicator, dungeon_portals
@@ -143,6 +138,7 @@ class LocalRom(object):
 
     def patch_base_rom(self):
         # verify correct checksum of baserom
+        raise NotImplementedError("alttpr: Archipelago should never call patch_base_rom inside Door Randomizer")
         basemd5 = hashlib.md5()
         basemd5.update(self.buffer)
         if JAP10HASH != basemd5.hexdigest():
