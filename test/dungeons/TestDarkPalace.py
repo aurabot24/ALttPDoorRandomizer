@@ -1,4 +1,4 @@
-from test.dungeons.TestDungeon import TestDungeon
+from .TestDungeon import TestDungeon
 
 
 class TestDarkPalace(TestDungeon):

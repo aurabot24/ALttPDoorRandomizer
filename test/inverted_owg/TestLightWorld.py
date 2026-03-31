@@ -1,4 +1,4 @@
-from test.inverted_owg.TestInvertedOWG import TestInvertedOWG
+from .TestInvertedOWG import TestInvertedOWG
 
 
 class TestLightWorld(TestInvertedOWG):

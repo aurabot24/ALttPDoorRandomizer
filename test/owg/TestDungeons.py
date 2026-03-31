@@ -1,4 +1,4 @@
-from test.owg.TestVanillaOWG import TestVanillaOWG
+from .TestVanillaOWG import TestVanillaOWG
 
 
 class TestDungeons(TestVanillaOWG):

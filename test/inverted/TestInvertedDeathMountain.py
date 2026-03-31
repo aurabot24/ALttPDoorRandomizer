@@ -1,4 +1,4 @@
-from test.inverted.TestInverted import TestInverted
+from .TestInverted import TestInverted
 
 
 class TestInvertedDeathMountain(TestInverted):

@@ -1,4 +1,4 @@
-from test.vanilla.TestVanilla import TestVanilla
+from .TestVanilla import TestVanilla
 
 
 class TestLightWorld(TestVanilla):
