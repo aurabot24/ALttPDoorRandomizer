@@ -8,10 +8,10 @@ from Utils import HexInt, hex_representer
 from collections import defaultdict
 from pathlib import Path
 
-import RaceRandom as random
-from BaseClasses import LocationType, DoorType
-from source.overworld.FluteShuffle import default_flute_connections, flute_data
-from source.tools.MysteryUtils import roll_settings, get_weights
+from ... import RaceRandom as random
+from ...BaseClasses import LocationType, DoorType
+from ..overworld.FluteShuffle import default_flute_connections, flute_data
+from ..tools.MysteryUtils import roll_settings, get_weights
 
 
 class CustomSettings(object):

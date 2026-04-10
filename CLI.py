@@ -6,11 +6,11 @@ import textwrap
 import shlex
 import sys
 
-from source.classes.BabelFish import BabelFish
+from .source.classes.BabelFish import BabelFish
 
-from Utils import update_deprecated_args
-from source.classes.CustomSettings import CustomSettings
-from source.limited.LimitedRunCoordinator import get_limited_run_args
+from .Utils import update_deprecated_args
+from .source.classes.CustomSettings import CustomSettings
+from .source.limited.LimitedRunCoordinator import get_limited_run_args
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):

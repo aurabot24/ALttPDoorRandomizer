@@ -2,11 +2,11 @@ import itertools
 import logging
 from collections import defaultdict, deque
 
-from BaseClasses import DoorType, dungeon_keys, KeyRuleType, RegionType
-from Regions import location_events
-from Dungeons import dungeon_keys, dungeon_bigs, dungeon_table
-from DungeonGenerator import ExplorationState, get_special_big_key_doors, count_locations_exclude_big_chest, prize_or_event
-from DungeonGenerator import reserved_location, blind_boss_unavail
+from .BaseClasses import DoorType, dungeon_keys, KeyRuleType, RegionType
+from .Regions import location_events
+from .Dungeons import dungeon_keys, dungeon_bigs, dungeon_table
+from .DungeonGenerator import ExplorationState, get_special_big_key_doors, count_locations_exclude_big_chest, prize_or_event
+from .DungeonGenerator import reserved_location, blind_boss_unavail
 
 
 class KeyLayout(object):

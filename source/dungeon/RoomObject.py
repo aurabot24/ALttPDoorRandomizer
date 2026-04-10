@@ -1,4 +1,4 @@
-from Utils import snes_to_pc
+from ...Utils import snes_to_pc
 
 # Subtype 3 object (0x2xx by jpdasm id - see bank 01)
 # B

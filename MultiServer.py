@@ -11,13 +11,13 @@ import urllib.request
 import websockets
 import zlib
 
-from BaseClasses import PotItem, PotFlags
-import Items
-import Regions
-import PotShuffle
-from MultiClient import ReceivedItem, get_item_name_from_id, get_location_name_from_address
-import source.dungeon.EnemyList as EnemyList
-import source.rom.DataTables as DataTables
+from .BaseClasses import PotItem, PotFlags
+from . import Items
+from . import Regions
+from . import PotShuffle
+from .MultiClient import ReceivedItem, get_item_name_from_id, get_location_name_from_address
+from .source.dungeon import EnemyList
+from .source.rom import DataTables
 
 class Client:
     def __init__(self, socket):

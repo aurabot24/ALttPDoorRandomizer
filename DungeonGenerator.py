@@ -1,4 +1,4 @@
-import RaceRandom as random
+from . import RaceRandom as random
 import collections
 import itertools
 from collections import defaultdict, deque
@@ -9,14 +9,14 @@ import operator as op
 import time
 from typing import List
 
-from BaseClasses import DoorType, Direction, CrystalBarrier, RegionType, Polarity, PolSlot, flooded_keys, Sector
-from BaseClasses import Hook, hook_from_door, Door
-from Regions import location_events, flooded_keys_reverse
-from Dungeons import split_region_starts
-from RoomData import DoorKind
+from .BaseClasses import DoorType, Direction, CrystalBarrier, RegionType, Polarity, PolSlot, flooded_keys, Sector
+from .BaseClasses import Hook, hook_from_door, Door
+from .Regions import location_events, flooded_keys_reverse
+from .Dungeons import split_region_starts
+from .RoomData import DoorKind
 
-from source.dungeon.DungeonStitcher import generate_dungeon_find_proposal
-from source.dungeon.DungeonStitcher import GenerationException as OtherGenException
+from .source.dungeon.DungeonStitcher import generate_dungeon_find_proposal
+from .source.dungeon.DungeonStitcher import GenerationException as OtherGenException
 
 
 class GraphPiece:

@@ -1,6 +1,6 @@
-from BaseClasses import Dungeon
-from Bosses import BossFactory
-from Items import ItemFactory
+from .BaseClasses import Dungeon
+from .Bosses import BossFactory
+from .Items import ItemFactory
 
 
 def create_dungeons(world, player):

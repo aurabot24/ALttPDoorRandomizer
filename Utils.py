@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import pkgutil
 import re
 import subprocess
 import sys
@@ -7,12 +8,13 @@ import xml.etree.ElementTree as ET
 from collections import defaultdict
 from math import factorial
 from itertools import count
-import fileinput
+# import fileinput  This isn't loading in AP for some reason
 
 import urllib.request
 import urllib.parse
-import yaml
 from pathlib import Path
+
+from Utils import parse_yaml  # Utils here is the Archipelago Utils, not the OWR Utils
 
 
 def int16_as_bytes(value):
@@ -759,28 +761,25 @@ def load_yaml(path_list):
     path = os.path.join(*path_list)
     if os.path.exists(Path(path)):
         with open(path, "r", encoding="utf-8") as f:
-            return yaml.load(f, Loader=yaml.SafeLoader)
+            return parse_yaml(f)
     elif urllib.parse.urlparse(path).scheme in ['http', 'https']:
-        return yaml.load(urllib.request.urlopen(path), Loader=yaml.FullLoader)
+        return parse_yaml(urllib.request.urlopen(path))
 
 
 yaml_cache = {}
 
 
-def load_cached_yaml(path_list):
-    path = os.path.join(*path_list)
+# This function has been rewritten compared to the original repo.
+# Loading files needs to be handled differently in AP because the files are inside a .zip (.apworld).
+def load_cached_yaml(path):
     if path in yaml_cache:
         return yaml_cache[path]
     else:
-        if os.path.exists(Path(path)):
-            with open(path, "r", encoding="utf-8") as f:
-                data = yaml.load(f, Loader=yaml.SafeLoader)
-                yaml_cache[path] = data
-                return data
-        elif urllib.parse.urlparse(path).scheme in ['http', 'https']:
-            data = yaml.load(urllib.request.urlopen(path), Loader=yaml.FullLoader)
-            yaml_cache[path] = data
-            return data
+        # TODO: Converting the YAMLs to Python would improve generation times
+        yaml = pkgutil.get_data(__name__, path)
+        data = parse_yaml(yaml)
+        yaml_cache[path] = data
+        return data
 
 
 class bidict(dict):
@@ -818,4 +817,5 @@ if __name__ == '__main__':
     # extract_data_from_us_rom(sys.argv[1])
     # extract_data_from_jp_rom(sys.argv[1])
     # check_pots()
-    find_and_replace()
+    # find_and_replace()  This depends on fileinput, which isn't loading in AP for some reason
+    pass

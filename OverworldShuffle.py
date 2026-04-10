@@ -1,13 +1,13 @@
-import RaceRandom as random, logging, copy
+from . import RaceRandom as random, logging, copy
 from collections import OrderedDict, defaultdict
-from DungeonGenerator import GenerationException
-from BaseClasses import OWEdge, WorldType, RegionType, Direction, Terrain, PolSlot, Entrance
-from Regions import mark_light_dark_world_regions
-from source.overworld.EntranceShuffle2 import connect_simple
-from source.overworld.FluteShuffle import shuffle_flute_spots, default_flute_connections, flute_data
-from OWEdges import OWTileRegions, OWEdgeGroups, OWEdgeGroupsTerrain, OWExitTypes, OpenStd, parallel_links, IsParallel
-from OverworldGlitchRules import create_owg_connections
-from Utils import bidict
+from .DungeonGenerator import GenerationException
+from .BaseClasses import OWEdge, WorldType, RegionType, Direction, Terrain, PolSlot, Entrance
+from .Regions import mark_light_dark_world_regions
+from .source.overworld.EntranceShuffle2 import connect_simple
+from .source.overworld.FluteShuffle import shuffle_flute_spots, default_flute_connections, flute_data
+from .OWEdges import OWTileRegions, OWEdgeGroups, OWEdgeGroupsTerrain, OWExitTypes, OpenStd, parallel_links, IsParallel
+from .OverworldGlitchRules import create_owg_connections
+from .Utils import bidict
 
 version_number = '0.7.1.3'
 # branch indicator is intentionally different across branches

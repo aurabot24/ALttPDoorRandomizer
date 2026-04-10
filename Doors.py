@@ -1,6 +1,6 @@
 
-from BaseClasses import Door, DoorType, Direction, CrystalBarrier, Portal
-from RoomData import PairedDoor
+from .BaseClasses import Door, DoorType, Direction, CrystalBarrier, Portal
+from .RoomData import PairedDoor
 
 # constants
 We = Direction.West

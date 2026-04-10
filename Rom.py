@@ -6,42 +6,42 @@ import hashlib
 import logging
 import os
 
-import Items
-import RaceRandom as random
+from . import Items
+from . import RaceRandom as random
 import struct
 import sys
-try:
-    import bps.apply
-    import bps.io
-except ImportError:
-    raise Exception('Could not load BPS module')
+# try:
+#     import bps.apply
+#     import bps.io
+# except ImportError:
+#     raise Exception('Could not load BPS module')
 
-from BaseClasses import ShopType, Region, Location, OWEdge, Door, DoorType, RegionType, LocationType
-from DoorShuffle import compass_data, DROptions, boss_indicator, dungeon_portals
-from Dungeons import dungeon_music_addresses, dungeon_table
-from Regions import location_table, shop_to_location_table, retro_shops
-from RoomData import DoorKind
-from Text import MultiByteTextMapper, CompressedTextMapper, text_addresses, Credits, TextTable
-from Text import Uncle_texts, Ganon1_texts, Ganon_Phase_3_No_Silvers_texts, TavernMan_texts, Sahasrahla2_texts
-from Text import Triforce_texts, Blind_texts, BombShop2_texts, junk_texts
-from Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts
-from Text import LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts
-from Text import Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
-from source.classes.ContributorCredits import get_credits_data
-from Utils import local_path, int16_as_bytes, int32_as_bytes, snes_to_pc
-from Items import ItemFactory, prize_item_table
-from source.overworld.EntranceData import door_addresses, ow_prize_table
-from source.overworld.EntranceShuffle2 import exit_ids
-from source.overworld.FluteShuffle import default_flute_connections, flute_data
-from InitialSram import InitialSram
+from .BaseClasses import ShopType, Region, Location, OWEdge, Door, DoorType, RegionType, LocationType
+from .DoorShuffle import compass_data, DROptions, boss_indicator, dungeon_portals
+from .Dungeons import dungeon_music_addresses, dungeon_table
+from .Regions import location_table, shop_to_location_table, retro_shops
+from .RoomData import DoorKind
+from .Text import MultiByteTextMapper, CompressedTextMapper, text_addresses, Credits, TextTable
+from .Text import Uncle_texts, Ganon1_texts, Ganon_Phase_3_No_Silvers_texts, TavernMan_texts, Sahasrahla2_texts
+from .Text import Triforce_texts, Blind_texts, BombShop2_texts, junk_texts
+from .Text import KingsReturn_texts, Sanctuary_texts, Kakariko_texts, Blacksmiths_texts, DeathMountain_texts
+from .Text import LostWoods_texts, WishingWell_texts, DesertPalace_texts, MountainTower_texts, LinksHouse_texts
+from .Text import Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, MagicShop_texts, Sahasrahla_names
+from .source.classes.ContributorCredits import get_credits_data
+from .Utils import local_path, int16_as_bytes, int32_as_bytes, snes_to_pc
+from .Items import ItemFactory, prize_item_table
+from .source.overworld.EntranceData import door_addresses, ow_prize_table
+from .source.overworld.EntranceShuffle2 import exit_ids
+from .source.overworld.FluteShuffle import default_flute_connections, flute_data
+from .InitialSram import InitialSram
 
-from source.classes.SFX import randomize_sfx, randomize_sfxinstruments, randomize_songinstruments
-from source.classes.GFX import GFXData
-from source.item.FillUtil import valid_pot_items
-from source.dungeon.EnemyList import EnemySprite, setup_enemy_dungeon_tables
-from source.dungeon.RoomObject import DoorObject
-from source.enemizer.Bossmizer import boss_writes
-from source.enemizer.Enemizer import write_enemy_shuffle_settings
+from .source.classes.SFX import randomize_sfx, randomize_sfxinstruments, randomize_songinstruments
+from .source.classes.GFX import GFXData
+from .source.item.FillUtil import valid_pot_items
+from .source.dungeon.EnemyList import EnemySprite, setup_enemy_dungeon_tables
+from .source.dungeon.RoomObject import DoorObject
+from .source.enemizer.Bossmizer import boss_writes
+from .source.enemizer.Enemizer import write_enemy_shuffle_settings
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
@@ -153,6 +153,7 @@ class LocalRom(object):
 
     def patch_base_rom(self):
         # verify correct checksum of baserom
+        raise NotImplementedError("alttpr: Archipelago should never call patch_base_rom inside ALttPDoorRandomizer")
         basemd5 = hashlib.md5()
         basemd5.update(self.buffer)
         if JAP10HASH != basemd5.hexdigest():
