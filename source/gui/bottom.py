@@ -4,14 +4,14 @@ import logging
 import os
 import random
 import re
-from CLI import parse_cli
-from Fill import FillError
-from Main import main, export_yaml, EnemizerError
-from Utils import local_path, output_path, open_file, update_deprecated_args
-import source.classes.constants as CONST
-from source.gui.randomize.multiworld import multiworld_page
-import source.gui.widgets as widgets
-from source.classes.Empty import Empty
+from ...CLI import parse_cli
+from ...Fill import FillError
+from ...Main import main, export_yaml, EnemizerError
+from ...Utils import local_path, output_path, open_file, update_deprecated_args
+from ..classes import constants as CONST
+from .randomize.multiworld import multiworld_page
+from . import widgets
+from ..classes.Empty import Empty
 
 
 def bottom_frame(self, parent, args=None):

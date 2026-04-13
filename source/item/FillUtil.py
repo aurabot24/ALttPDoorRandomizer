@@ -1,13 +1,13 @@
-import RaceRandom as random
+from ... import RaceRandom as random
 import logging
 from collections import defaultdict
 
-from source.item.District import resolve_districts
-from BaseClasses import PotItem, PotFlags, LocationType
-from DoorShuffle import validate_vanilla_reservation
-from Dungeons import dungeon_table
-from Items import item_table, ItemFactory
-from PotShuffle import vanilla_pots
+from .District import resolve_districts
+from ...BaseClasses import PotItem, PotFlags, LocationType
+from ...DoorShuffle import validate_vanilla_reservation
+from ...Dungeons import dungeon_table
+from ...Items import item_table, ItemFactory
+from ...PotShuffle import vanilla_pots
 
 
 class ItemPoolConfig(object):

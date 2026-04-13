@@ -1,5 +1,5 @@
 import argparse
-import RaceRandom as random
+from ... import RaceRandom as random
 import os
 from pathlib import Path
 

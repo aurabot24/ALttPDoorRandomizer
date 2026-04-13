@@ -1,4 +1,4 @@
-from source.classes import diags as diags
+from ..classes import diags as diags
 
 global VERBOSE
 VERBOSE = True

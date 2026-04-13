@@ -1,8 +1,8 @@
 from tkinter import ttk, StringVar, Button, Entry, Frame, Label, NE, NW, E, W, LEFT, RIGHT
 from functools import partial
-import source.classes.SpriteSelector as spriteSelector
-import source.classes.ItemGfxSelector as itemGfxSelector
-import source.gui.widgets as widgets
+from ...classes import SpriteSelector as spriteSelector
+from ...classes import ItemGfxSelector as itemGfxSelector
+from ..widgets import *
 import json
 import os
 

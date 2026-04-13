@@ -1,9 +1,9 @@
 from tkinter import ttk, filedialog, StringVar, Button, Entry, Frame, Label, N, E, W, LEFT, RIGHT, BOTTOM, X
-import source.gui.widgets as widgets
+from ..widgets import *
 import json
 import os
 import webbrowser
-from source.classes.Empty import Empty
+from ...classes.Empty import Empty
 
 def enemizer_page(parent,settings):
       # Enemizer

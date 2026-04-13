@@ -1,5 +1,5 @@
 from tkinter import ttk, Frame, E, W, LEFT, RIGHT
-import source.gui.widgets as widgets
+from ..widgets import *
 import json
 import os
 

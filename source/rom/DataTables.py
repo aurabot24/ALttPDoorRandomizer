@@ -1,16 +1,18 @@
 from collections import defaultdict
+import os
+from pathlib import Path
 
-from Utils import snes_to_pc, int24_as_bytes, int16_as_bytes, load_cached_yaml, pc_to_snes
+from ...Utils import snes_to_pc, int24_as_bytes, int16_as_bytes, load_cached_yaml, pc_to_snes
 
-from source.dungeon.EnemyList import EnemyTable, init_vanilla_sprites, vanilla_sprites, init_enemy_stats, EnemySprite
-from source.dungeon.EnemyList import sprite_translation, overlord_translation
-from RoomData import Position, DoorKind
-from source.dungeon.RoomHeader import init_room_headers, RoomHeader
-from source.dungeon.RoomList import Room0127, Room
-from source.dungeon.RoomObject import RoomObject, DoorObject
-from source.enemizer.OwEnemyList import init_vanilla_sprites_ow, vanilla_sprites_ow
-from source.enemizer.SpriteSheets import init_sprite_sheets, init_sprite_requirements, SheetChoice
-from source.classes.GFX import init_gfx_data
+from ..dungeon.EnemyList import EnemyTable, init_vanilla_sprites, vanilla_sprites, init_enemy_stats, EnemySprite
+from ..dungeon.EnemyList import sprite_translation, overlord_translation
+from ...RoomData import Position, DoorKind
+from ..dungeon.RoomHeader import init_room_headers, RoomHeader
+from ..dungeon.RoomList import Room0127, Room
+from ..dungeon.RoomObject import RoomObject, DoorObject
+from ..enemizer.OwEnemyList import init_vanilla_sprites_ow, vanilla_sprites_ow
+from ..enemizer.SpriteSheets import init_sprite_sheets, init_sprite_requirements, SheetChoice
+from ..classes.GFX import init_gfx_data
 
 
 def convert_area_id_to_offset(area_id):
@@ -51,17 +53,17 @@ class DataTables:
         self.ow_enemy_denials = {}
         self.uw_enemy_drop_denials = {}
         self.sheet_choices = []
-        denial_data = load_cached_yaml(['source', 'enemizer', 'enemy_deny.yaml'])
+        denial_data = load_cached_yaml(os.path.join('source', 'enemizer', 'enemy_deny.yaml'))
         for denial in denial_data['UwGeneralDeny']:
             self.uw_enemy_denials[denial[0], denial[1]] = {sprite_translation[x] for x in denial[2]}
         for denial in denial_data['OwGeneralDeny']:
             self.ow_enemy_denials[denial[0], denial[1]] = {sprite_translation[x] for x in denial[2]}
         for denial in denial_data['UwEnemyDrop']:
             self.uw_enemy_drop_denials[denial[0], denial[1]] = {sprite_translation[x] for x in denial[2]}
-        weights = load_cached_yaml(['source', 'enemizer', 'enemy_weight.yaml'])
+        weights = load_cached_yaml(os.path.join('source', 'enemizer', 'enemy_weight.yaml'))
         self.uw_weights = {sprite_translation[k]: v for k, v in weights['UW'].items()}
         self.ow_weights = {sprite_translation[k]: v for k, v in weights['OW'].items()}
-        sheet_weights = load_cached_yaml(['source', 'enemizer', 'sheet_weight.yaml'])
+        sheet_weights = load_cached_yaml(os.path.join('source', 'enemizer', 'sheet_weight.yaml'))
         for item in sheet_weights['SheetChoices']:
             choice = SheetChoice(tuple(item['slots']), item['assignments'], item['weight'])
             self.sheet_choices.append(choice)
