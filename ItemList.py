@@ -774,7 +774,7 @@ def create_dynamic_bonkdrop_locations(world, player):
 
 
 def fill_prizes(world, attempts=15):
-    from Items import prize_item_table
+    from .Items import prize_item_table
     all_state = world.get_all_state(keys=True)
     for player in range(1, world.players + 1):
         if world.prizeshuffle[player] != 'none':

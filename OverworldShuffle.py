@@ -1,5 +1,8 @@
-from . import RaceRandom as random, logging, copy
 from collections import OrderedDict, defaultdict
+import copy
+import logging
+
+from . import RaceRandom as random
 from .DungeonGenerator import GenerationException
 from .BaseClasses import OWEdge, WorldType, RegionType, Direction, Terrain, PolSlot, Entrance
 from .Regions import mark_light_dark_world_regions
@@ -429,7 +432,7 @@ def link_overworld(world, player):
                 for (forward_edge, back_edge) in zip(forward_set, back_set):
                     connect_two_way(world, forward_edge, back_edge, player, connected_edges)
     elif world.owLayout[player] == 'grid':
-        from source.overworld.LayoutGenerator import generate_random_grid_layout
+        from .source.overworld.LayoutGenerator import generate_random_grid_layout
 
         for exitname, destname in special_screen_connections:
             connect_two_way(world, exitname, destname, player, connected_edges)
@@ -1270,8 +1273,8 @@ def can_reach_smith(world, player):
     return found
 
 def build_sectors(world, player):
-    from Main import copy_world_premature
-    from OWEdges import OWTileRegions
+    from .Main import copy_world_premature
+    from .OWEdges import OWTileRegions
     
     # perform accessibility check on duplicate world
     for p in range(1, world.players + 1):
@@ -1323,10 +1326,10 @@ def build_sectors(world, player):
     return sectors
 
 def build_accessible_region_list(world, start_region, player, build_copy_world=False, cross_world=False, region_rules=True, ignore_ledges=False, restrictive_follower=False):
-    from BaseClasses import CollectionState
-    from Main import copy_world_premature
-    from Items import ItemFactory
-    from Utils import stack_size3a
+    from .BaseClasses import CollectionState
+    from .Main import copy_world_premature
+    from .Items import ItemFactory
+    from .Utils import stack_size3a
     
     def explore_region(region_name, region=None):
         if stack_size3a() > 500:
@@ -1395,7 +1398,7 @@ def validate_layout(world, player):
     }
 
     # TODO: Find a better source for the below lists, original sourced was deprecated
-    from source.overworld.EntranceData import default_dungeon_connections, default_connector_connections, default_item_connections, default_shop_connections, default_drop_connections, default_dropexit_connections
+    from .source.overworld.EntranceData import default_dungeon_connections, default_connector_connections, default_item_connections, default_shop_connections, default_drop_connections, default_dropexit_connections
 
     dungeon_entrances = list(zip(*default_dungeon_connections + [('Ganons Tower', '')]))[0]
     connector_entrances = list(zip(*default_connector_connections))[0]

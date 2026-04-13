@@ -3,7 +3,7 @@ Helper functions to deliver entrance/exit/region sets to OWG rules.
 """
 
 from .BaseClasses import Entrance, Region
-from OWEdges import OWTileRegions
+from .OWEdges import OWTileRegions
 
 # Cave regions that superbunny can get through - but only with a sword.
 sword_required_superbunny_mirror_regions = ["Spiral Cave (Top)"]

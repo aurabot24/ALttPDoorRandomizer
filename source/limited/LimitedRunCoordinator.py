@@ -1,4 +1,4 @@
-from source.classes.CustomSettings import load_yaml, CustomSettings
+from ..classes.CustomSettings import load_yaml, CustomSettings
 import os
 
 

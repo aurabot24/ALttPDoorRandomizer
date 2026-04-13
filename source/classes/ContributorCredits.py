@@ -10,7 +10,7 @@ import logging
 from typing import List, Tuple, Optional
 from enum import Enum
 
-from Text import (
+from ...Text import (
     GoldCreditMapper, GreenCreditMapper, RedCreditMapper,
     LargeCreditTopMapper, LargeCreditBottomMapper
 )

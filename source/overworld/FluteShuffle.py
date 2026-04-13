@@ -1,8 +1,11 @@
-import RaceRandom as random, logging, copy
-from BaseClasses import Entrance, RegionType, Terrain
-from source.overworld.EntranceShuffle2 import connect_simple
-from OWEdges import OWTileRegions
-from DungeonGenerator import GenerationException
+import copy
+import logging 
+
+from ... import RaceRandom as random
+from ...BaseClasses import Entrance, RegionType, Terrain
+from .EntranceShuffle2 import connect_simple
+from ...OWEdges import OWTileRegions
+from ...DungeonGenerator import GenerationException
 
 def shuffle_flute_spots(world, player):
     def connect_flutes(flute_destinations):

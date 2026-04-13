@@ -2,7 +2,7 @@ import collections
 import logging
 from collections import deque
 
-import .OverworldGlitchRules
+from . import OverworldGlitchRules
 from .BaseClasses import CollectionState, RegionType, DoorType, Entrance, CrystalBarrier, KeyRuleType, LocationType, Terrain
 from .BaseClasses import PotFlags
 from .Dungeons import dungeon_table

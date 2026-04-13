@@ -5,7 +5,7 @@ import copy
 from collections import defaultdict, OrderedDict
 from ...BaseClasses import RegionType
 
-from EntranceData import door_addresses
+from .EntranceData import door_addresses
 
 
 class EntrancePool(object):
@@ -53,7 +53,7 @@ def link_entrances_new(world, player):
     i_entrance_map = {x: y for x, y in entrance_map.items() if not x.startswith('Inverted')}
     i_single_ent_map = {x: y for x, y in single_entrance_map.items()}
 
-    from OverworldShuffle import build_sectors
+    from ...OverworldShuffle import build_sectors
     if not world.owsectors[player] and world.shuffle[player] != 'vanilla':
         world.owsectors[player] = build_sectors(world, player)
 

@@ -1256,7 +1256,7 @@ def adjust_locations(world, player):
             location.type = LocationType.Logical
             location.real = False
             if l not in ['Ganon', 'Agahnim 1', 'Agahnim 2']:
-                from ItemList import follower_quests
+                from .ItemList import follower_quests
                 if not world.shuffle_followers[player] or l not in follower_quests:
                     location.skip = True
 

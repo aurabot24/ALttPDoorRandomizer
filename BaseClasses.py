@@ -1634,8 +1634,8 @@ class Region(object):
         self.crystal_switch = False
 
     def can_reach(self, state):
-        from Utils import stack_size3a
-        from DungeonGenerator import GenerationException
+        from .Utils import stack_size3a
+        from .DungeonGenerator import GenerationException
         if stack_size3a() > self.world.players * 1000:
             raise GenerationException(f'Infinite loop detected for "{self.name}" located at \'Region.can_reach\'')
         

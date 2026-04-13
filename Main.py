@@ -1097,7 +1097,7 @@ def copy_world_premature(world, player, create_flute_exits=True):
                         else:
                             src_exit.connect(dest_region)
 
-    from OverworldShuffle import categorize_world_regions
+    from .OverworldShuffle import categorize_world_regions
     categorize_world_regions(ret, player)
 
     for item in world.precollected_items:
