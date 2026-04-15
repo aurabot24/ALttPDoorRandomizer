@@ -1713,7 +1713,7 @@ def patch_rom(world, rom, player, team, is_mystery=False, rom_header=None):
 
 
     if world.shuffle_followers[player]:
-        from ItemList import follower_locations, follower_pickups
+        from .ItemList import follower_locations, follower_pickups
 
         for loc_name, address in follower_locations.items():
             loc = world.get_location(loc_name, player)
@@ -1757,7 +1757,7 @@ def patch_rom(world, rom, player, team, is_mystery=False, rom_header=None):
             rom.write_bytes(0x1802C1, world.data_tables[player].room_headers[0x80].free_gfx[0:2])
             rom.write_bytes(0x1802C7, world.data_tables[player].room_headers[0x45].free_gfx[0:2])
     else:
-        from OverworldShuffle import can_reach_smith
+        from .OverworldShuffle import can_reach_smith
         if not can_reach_smith(world, player):
             rom.write_byte(0x180043, 0x01) # patch for deleting smith on S+Q
         if world.shuffle[player] in ['restricted', 'simple', 'full', 'lite', 'lean', 'district', 'swapped', 'crossed', 'insanity']:
@@ -1827,8 +1827,8 @@ def patch_rom(world, rom, player, team, is_mystery=False, rom_header=None):
 
     # set rom name
     # 21 bytes
-    from Main import __version__
-    from OverworldShuffle import __version__ as ORVersion
+    from .Main import __version__
+    from .OverworldShuffle import __version__ as ORVersion
     if rom_header:
         if len(rom_header) > 21:
             raise Exception('ROM header too long. Max 21 bytes, found %d bytes.' % len(rom_header))
@@ -2113,7 +2113,7 @@ def apply_rom_settings(rom, beep, color, quickswap, fastmenu, disable_music, spr
         write_sprite(rom, sprite)
 
     if triforce_gfx is not None:
-        from Tables import item_gfx_table
+        from .Tables import item_gfx_table
         if triforce_gfx in item_gfx_table.keys():
             (is_custom, address, palette, pal_addr, size) = item_gfx_table[triforce_gfx]
             address = address if is_custom else 0x8000 + address

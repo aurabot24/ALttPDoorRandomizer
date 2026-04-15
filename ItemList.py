@@ -714,7 +714,7 @@ def create_farm_locations(world, player):
             world.dynamic_locations.append(loc)
         return loc
 
-    from Rules import set_rule, add_rule, add_bunny_rule
+    from .Rules import set_rule, add_rule, add_bunny_rule
     for region in bush_bombs:
         loc = create_and_fill_location(region, 'Bush Drop', 'Farmable Bombs')
         add_bunny_rule(loc, player)

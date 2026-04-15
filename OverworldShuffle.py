@@ -1219,8 +1219,8 @@ def update_world_regions(world, player):
             world.get_region(name, player).type = RegionType.LightWorld
 
 def can_reach_smith(world, player):
-    from Items import ItemFactory
-    from BaseClasses import CollectionState
+    from .Items import ItemFactory
+    from .BaseClasses import CollectionState
     
     def explore_region(region_name, region=None):
         nonlocal found

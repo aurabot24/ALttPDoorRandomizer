@@ -1207,24 +1207,24 @@ class CollectionState(object):
         return False
 
     def can_collect_bonkdrops(self, player):
-        return self.has_Boots(player) or (self.has_sword(player) and self.has('Quake', player))
+        return self.has_Boots(player) or (self.has_sword(player) and self.has("Quake", player))
 
     def can_farm_rupees(self, player):
-        return self.has('Farmable Rupees', player)
+        return self.has("Farmable Rupees", player)
 
     def can_farm_bombs(self, player):
-        if self.world.mode[player] == 'standard' and not self.has('Zelda Delivered', player):
+        if self.world.mode[player] == "standard" and not self.has("Zelda Delivered", player):
             return True
 
-        if self.has('Farmable Bombs', player):
+        if self.has("Farmable Bombs", player):
             return True
 
         # stun prize
-        if self.can_stun_enemies(player) and self.world.prizes[player]['stun'] in [0xdc, 0xdd, 0xde]:
+        if self.can_stun_enemies(player) and self.world.prizes[player]["stun"] in [0xdc, 0xdd, 0xde]:
             return True
 
         # bomb purchases
-        if self.can_farm_rupees(player) and (self.can_buy_unlimited('Bombs (10)', player) or self.can_reach('Big Bomb Shop', None, player)):
+        if self.can_farm_rupees(player) and (self.can_buy_unlimited("Bombs (10)", player) or self.can_reach("Big Bomb Shop", None, player)):
             return True
 
         return False
@@ -1790,7 +1790,7 @@ class Entrance(object):
                 ent_list = [e for e in start_region.entrances if e.parent_region.type != RegionType.Menu]
                 follower_region = ent_list[0].parent_region
             if (follower_region.world.mode[self.player] != 'inverted') == (follower_region.type == RegionType.LightWorld):
-                from OverworldShuffle import get_mirror_edges
+                from .OverworldShuffle import get_mirror_edges
                 mirror_map = get_mirror_edges(follower_region.world, follower_region, self.player)
                 while len(mirror_map) and not found:
                     if mirror_map[0][1] == follower_region.name:
@@ -1850,7 +1850,7 @@ class Entrance(object):
                     dest_region = dest_region.entrances[0].parent_region
                 if (dest_region.world.mode[self.player] != 'inverted') != (dest_region.type == RegionType.LightWorld):
                     # loop thru potential places to leave a mirror portal
-                    from OverworldShuffle import get_mirror_edges
+                    from .OverworldShuffle import get_mirror_edges
                     mirror_map = get_mirror_edges(dest_region.world, dest_region, self.player)
                     while len(mirror_map) and not found:
                         mirror_exit = dest_region.world.get_entrance(mirror_map[0][0], self.player)

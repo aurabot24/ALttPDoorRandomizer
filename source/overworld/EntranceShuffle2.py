@@ -397,7 +397,7 @@ def do_main_shuffle(entrances, exits, avail, mode_def):
 
 def do_old_man_cave_exit(entrances, exits, avail, cross_world):
     if 'Old Man Cave Exit (East)' in exits:
-        from OverworldShuffle import build_accessible_region_list
+        from ...OverworldShuffle import build_accessible_region_list
         if not avail.world.is_tile_swapped(0x03, avail.player) or avail.world.shuffle[avail.player] == 'district':
             region_name = 'West Death Mountain (Top)'
         else:
@@ -785,7 +785,7 @@ def do_links_house(entrances, exits, avail, cross_world):
 
 
 def get_starting_entrances(avail, force_starting_world=True):
-    from OWEdges import OWTileRegions
+    from ...OWEdges import OWTileRegions
     sector = None
     invalid_sectors = list()
     entrances = list()
@@ -817,8 +817,8 @@ def get_starting_entrances(avail, force_starting_world=True):
 
 
 def get_nearby_entrances(avail, start_region):
-    from OverworldShuffle import one_way_ledges
-    from OWEdges import OWTileRegions
+    from ...OverworldShuffle import one_way_ledges
+    from ...OWEdges import OWTileRegions
 
     # get walkable sector in which initial entrance was placed
     regions = next(s for s in avail.world.owsectors[avail.player] if any(start_region in w for w in s))
@@ -857,10 +857,10 @@ def get_nearby_entrances(avail, start_region):
 
 
 def get_accessible_entrances(start_region, avail, assumed_inventory=[], cross_world=False, region_rules=True, exit_rules=True, include_one_ways=False, restrictive_follower=False):
-    from Main import copy_world_premature
-    from BaseClasses import CollectionState
-    from Items import ItemFactory
-    from OverworldShuffle import build_accessible_region_list, one_way_ledges
+    from ...Main import copy_world_premature
+    from ...BaseClasses import CollectionState
+    from ...Items import ItemFactory
+    from ...OverworldShuffle import build_accessible_region_list, one_way_ledges
     
     for p in range(1, avail.world.players + 1):
         avail.world.key_logic[p] = {}
@@ -933,7 +933,7 @@ def figure_out_true_exits(exits, avail):
 
 def must_exits_helper(avail):
     def find_inacessible_ow_regions():
-        from DoorShuffle import find_inaccessible_regions
+        from ...DoorShuffle import find_inaccessible_regions
         nonlocal inaccessible_regions
         find_inaccessible_regions(avail.world, avail.player)
         inaccessible_regions = list(avail.world.inaccessible_regions[avail.player])
@@ -1535,7 +1535,7 @@ def do_mandatory_connections(avail, entrances, cave_options, must_exit):
     invalid_cave_connections = defaultdict(set)
 
     if avail.world.logic[avail.player] in ['owglitches', 'hybridglitches', 'nologic']:
-        import OverworldGlitchRules
+        from ... import OverworldGlitchRules
         for entrance in OverworldGlitchRules.get_non_mandatory_exits(avail.world, avail.player):
             invalid_connections[entrance] = set()
             if entrance in must_exit:
@@ -1655,11 +1655,23 @@ def do_mandatory_connections(avail, entrances, cave_options, must_exit):
                 used_caves.remove(cave)
             else:
                 required_entrances += len(cave)-1
+            if turtle_rock_could_softlock(avail) and (rnd_cave[-1] == "Turtle Rock Exit (Front)" or rnd_cave[-1] == "Turtle Rock Isolated Ledge Exit"):
+                # If the front and back exits of Turtle Rock are both must-exits, and small keys aren't shuffled, then it's impossible
+                # to place the small keys so they are all logically accessible. Thus, only one of the front and back exits can be a must-exit.
+                safe_exit = "Turtle Rock Exit (Front)" if rnd_cave[-1] == "Turtle Rock Isolated Ledge Exit" else "Turtle Rock Isolated Ledge Exit"
+                entrance = next(e for e in entrances[::-1] if e not in invalid_connections[exit]
+                                and e not in invalid_cave_connections[tuple(cave)] and e not in must_exit
+                                and (not avail.swapped or safe_exit != avail.combine_map[e])
+                                and bonk_fairy_exception(avail, e))
+                entrances.remove(entrance)
+                connect_two_way(entrance, safe_exit, avail)
+                rnd_cave.remove(safe_exit)
             cave_options.append(rnd_cave[0:-1])
             random.shuffle(cave_options)
             used_caves.append(rnd_cave[0:-1])
             invalid_cave_connections[tuple(rnd_cave[0:-1])] = invalid_cave_connections[tuple(cave)].union(invalid_connections[exit])
         cave_options.remove(cave)
+
     for cave in used_caves:
         if cave in cave_options:  # check if we placed multiple entrances from this 3 or 4 exit
             for cave_exit in cave:
@@ -1677,6 +1689,15 @@ def do_mandatory_connections(avail, entrances, cave_options, must_exit):
             cave_options.remove(cave)
     if avail.swapped:
         entrances.extend(swap_forbidden)
+
+
+def turtle_rock_could_softlock(avail):
+    # If the front and back exits of Turtle Rock are both must-exits, and small keys aren't shuffled, then it's impossible
+    # to place the small keys so they are all logically accessible. This returns true if that is possible with the current settings.
+    simple_drop_shuffle = ["none", "keys"]
+    return avail.world.keyshuffle[avail.player] == "none" and \
+           (not avail.world.potshuffle[avail.player] or avail.world.pottery[avail.player] in simple_drop_shuffle) and \
+           avail.world.dropshuffle[avail.player] in simple_drop_shuffle
 
 
 def do_mandatory_connections_decoupled(avail, cave_options, must_exit):
