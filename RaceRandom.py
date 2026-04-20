@@ -33,13 +33,18 @@ seed = _prng_inst.seed
 shuffle = _prng_inst.shuffle
 uniform = _prng_inst.uniform
 
-for func_name in dir(_random):
-    if not callable(getattr(_random, func_name)):
-        continue
-    if not callable(getattr(_prng_inst, func_name, None)):
-        continue
-    if func_name.startswith('_'):
-        continue
+def init_race_random(multiworld_random):
+    global _prng_inst, _cprng_inst
+    _prng_inst = multiworld_random
+    _cprng_inst = multiworld_random  # AP doesn't use system random
 
-    globals()[func_name] = _wrap(func_name)
-    __all__.append(func_name)
+    for func_name in dir(multiworld_random):
+        if not callable(getattr(multiworld_random, func_name)):
+            continue
+        if not callable(getattr(_prng_inst, func_name, None)):
+            continue
+        if func_name.startswith('_'):
+            continue
+
+        globals()[func_name] = _wrap(func_name)
+        __all__.append(func_name)
