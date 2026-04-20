@@ -1743,9 +1743,10 @@ location_table = {'Mushroom': (0x180013, 0x186df8, False, 'in the woods'),
                   'Potion Shop - Middle': (None, None, False, 'for sale near potions'),
                   'Potion Shop - Right': (None, None, False, 'for sale near potions'),
                   }
+# Commenting out the shop and bonk tables because it's easier to add them if needed, than to remove them when not needed
 lookup_id_to_name = {data[0]: name for name, data in location_table.items() if type(data[0]) == int}
-lookup_id_to_name.update(shop_table_by_location_id)
-lookup_id_to_name.update(bonk_table_by_location_id)
+# lookup_id_to_name.update(shop_table_by_location_id)
+# lookup_id_to_name.update(bonk_table_by_location_id)
 lookup_name_to_id = {name: data[0] for name, data in location_table.items() if type(data[0]) == int}
-lookup_name_to_id.update(shop_table_by_location)
-lookup_name_to_id.update(bonk_table_by_location)
+# lookup_name_to_id.update(shop_table_by_location)
+# lookup_name_to_id.update(bonk_table_by_location)
