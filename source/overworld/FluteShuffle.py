@@ -23,7 +23,7 @@ def shuffle_flute_spots(world, player):
         world.owflutespots[player] = flute_spots
         connect_flutes(flute_spots)
     else:
-        from OverworldShuffle import one_way_ledges
+        from ...OverworldShuffle import one_way_ledges
 
         flute_spots = 8
         flute_pool = list(flute_data.keys())
