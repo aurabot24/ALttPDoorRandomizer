@@ -1486,7 +1486,7 @@ def patch_rom(world, rom, player, team, is_mystery=False, rom_header=None):
                     map_x, map_y = adjust_ow_coordinates_to_layout(world, player, map_x, map_y, coord_flags & 0x8000 != 0)
             return (coord_flags | map_x, map_y)
         elif type(ent) is Location:
-            from OverworldShuffle import OWTileRegions, ow_loc_prize_table
+            from .OverworldShuffle import OWTileRegions, ow_loc_prize_table
             if ent.name in ow_loc_prize_table:
                 coords = ow_loc_prize_table[ent.name]
             else:
@@ -2701,7 +2701,7 @@ def write_strings(rom, world, player, team):
     crystal6 = world.find_items('Crystal 6', player)
     greenpendant = world.find_items('Green Pendant', player)
     def missing_prize():
-        from BaseClasses import Dungeon
+        from .BaseClasses import Dungeon
         d = Dungeon('your pocket', [], None, [], [], player, 0)
         i = ItemFactory('Nothing', player)
         i.dungeon_object = d

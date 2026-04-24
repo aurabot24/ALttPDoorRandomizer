@@ -37,7 +37,7 @@ def dungeon_tracking(world):
         layout = world.dungeon_layouts[dungeon.player][dungeon.name]
         layout.dungeon_items = len([i for i in dungeon.all_items if i.is_inside_dungeon_item(world)])
         if world.prizeshuffle[dungeon.player] in ['dungeon', 'nearby'] and not dungeon.prize:
-            from Dungeons import dungeon_table
+            from .Dungeons import dungeon_table
             if dungeon_table[dungeon.name].prize:
                 layout.dungeon_items += 1
         layout.free_items = layout.location_cnt - layout.dungeon_items
