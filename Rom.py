@@ -432,7 +432,7 @@ def handle_native_dungeon(location, itemid):
     return itemid
 
 
-def patch_rom(world, rom, player, team, is_mystery=False, rom_header=None):
+def patch_rom(world, rom, player, team, is_mystery=False, rom_header=None, hint_text={}):
     random.seed(world.rom_seeds[player])
 
     # progressive bow silver arrow hint hack
@@ -1818,7 +1818,7 @@ def patch_rom(world, rom, player, team, is_mystery=False, rom_header=None):
     write_enemizer_tweaks(rom, world, player)
     write_limited_data(rom, world, player)
     write_gfx_data(rom, world, player)
-    write_strings(rom, world, player, team)
+    write_strings(rom, world, player, team, hint_text)
 
     # write initial sram
     rom.write_initial_sram()
@@ -2368,7 +2368,7 @@ def write_string_to_rom(rom, target, string):
     rom.write_bytes(address, MultiByteTextMapper.convert(string, maxbytes))
 
 
-def write_strings(rom, world, player, team):
+def write_strings(rom, world, player, team, prize_hint_text={}):
     tt = TextTable()
     tt.removeUnwantedText()
     if world.shuffle[player] != 'vanilla':
@@ -2697,9 +2697,7 @@ def write_strings(rom, world, player, team):
         silverarrow_hint = f'Did you find the silver arrows {hint_phrase}?' if progressive_silvers else no_silver_text
         tt['ganon_phase_3_no_silvers_alt'] = silverarrow_hint
 
-    crystal5 = world.find_items('Crystal 5', player)
-    crystal6 = world.find_items('Crystal 6', player)
-    greenpendant = world.find_items('Green Pendant', player)
+    # This should never be called
     def missing_prize():
         from .BaseClasses import Dungeon
         d = Dungeon('your pocket', [], None, [], [], player, 0)
@@ -2710,7 +2708,22 @@ def write_strings(rom, world, player, team):
         loc = Location(player, 'Nowhere', parent=r, hint_text='in your pocket')
         loc.item = i
         return loc
-    (crystal5, crystal6, greenpendant) = tuple([x[0] if x else missing_prize() for x in [crystal5, crystal6, greenpendant]])
+
+    def get_prize_location(prize_name: str):
+        prize = world.find_items(prize_name, player)
+        if prize:
+            return prize[0]
+
+        prize = missing_prize()
+        if prize_name in prize_hint_text:
+            prize.hint_text = prize_hint_text[prize_name]
+        return prize
+
+    import pdb; pdb.set_trace()
+    crystal5 = get_prize_location("Crystal 5")
+    crystal6 = get_prize_location("Crystal 6")
+    greenpendant = get_prize_location("Green Pendant")
+
     bigbomb_follower = 'Big Bomb?\n'
     if world.shuffle_followers[player]:
         bigbomb_follower = ''
