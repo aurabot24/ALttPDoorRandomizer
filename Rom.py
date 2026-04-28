@@ -2368,7 +2368,7 @@ def write_string_to_rom(rom, target, string):
     rom.write_bytes(address, MultiByteTextMapper.convert(string, maxbytes))
 
 
-def write_strings(rom, world, player, team, prize_hint_text={}):
+def write_strings(rom, world, player, team, multiworld_hint_text={}):
     tt = TextTable()
     tt.removeUnwantedText()
     if world.shuffle[player] != 'vanilla':
@@ -2671,7 +2671,6 @@ def write_strings(rom, world, player, team, prize_hint_text={}):
                 tt[location] = junk_hints.pop(0)
 
     # We still need the older hints of course. Those are done here.
-
     no_silver_text = Ganon_Phase_3_No_Silvers_texts[random.randint(0, len(Ganon_Phase_3_No_Silvers_texts) - 1)]
 
     silverarrows = world.find_items('Silver Arrows', player)
@@ -2692,7 +2691,10 @@ def write_strings(rom, world, player, team, prize_hint_text={}):
         hint_phrase = hint_text(distinguished_prog_bow_loc).replace("Ganon's", "my")
         silverarrow_hint = f'Did you find the silver arrows {hint_phrase}?' if progressive_silvers else no_silver_text
         tt['ganon_phase_3_no_silvers'] = silverarrow_hint
-    if any(prog_bow_locs):
+    if "Progressive Bow" in multiworld_hint_text:
+        tt['ganon_phase_3_no_silvers'] = f"Did you find the silver arrows at {multiworld_hint_text["Progressive Bow"]}?"
+        tt['ganon_phase_3_no_silvers_alt'] = f"Did you find the silver arrows at {multiworld_hint_text["Progressive Bow"]}?"
+    elif any(prog_bow_locs):
         hint_phrase = hint_text(random.choice(prog_bow_locs)).replace("Ganon's", "my")
         silverarrow_hint = f'Did you find the silver arrows {hint_phrase}?' if progressive_silvers else no_silver_text
         tt['ganon_phase_3_no_silvers_alt'] = silverarrow_hint
@@ -2715,8 +2717,8 @@ def write_strings(rom, world, player, team, prize_hint_text={}):
             return prize[0]
 
         prize = missing_prize()
-        if prize_name in prize_hint_text:
-            prize.hint_text = prize_hint_text[prize_name]
+        if prize_name in multiworld_hint_text:
+            prize.hint_text = multiworld_hint_text[prize_name]
         return prize
 
     crystal5 = get_prize_location("Crystal 5")
