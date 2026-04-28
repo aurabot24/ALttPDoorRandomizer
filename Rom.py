@@ -2719,7 +2719,6 @@ def write_strings(rom, world, player, team, prize_hint_text={}):
             prize.hint_text = prize_hint_text[prize_name]
         return prize
 
-    import pdb; pdb.set_trace()
     crystal5 = get_prize_location("Crystal 5")
     crystal6 = get_prize_location("Crystal 6")
     greenpendant = get_prize_location("Green Pendant")
