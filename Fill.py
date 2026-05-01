@@ -1105,7 +1105,7 @@ def balance_money_progression(world):
     while not done:
         attempts -= 1
         if attempts < 0:
-            from DungeonGenerator import GenerationException
+            from .DungeonGenerator import GenerationException
             raise GenerationException(f'Infinite loop detected at "balance_money_progression"')
         sphere_costs = {player: 0 for player in range(1, world.players+1)}
         locked_by_money = {player: set() for player in range(1, world.players+1)}
