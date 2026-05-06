@@ -58,7 +58,7 @@ class CustomSettings(object):
         return meta['players']
 
     def adjust_args(self, args, resolve_weighted=True):
-        from source.limited.LimitedRunCoordinator import get_limited_run_args
+        from ..limited.LimitedRunCoordinator import get_limited_run_args
         def get_setting(value: Any, default):
             if value or value == 0:
                 if isinstance(value, dict):
@@ -531,7 +531,7 @@ class CustomSettings(object):
                 if not use_custom_pool or p in world.customitemarray:
                     item_pool[p] = defaultdict(int)
         if use_custom_pool and world.custom:
-            import source.classes.constants as CONST
+            from . import constants as CONST
             for p in world.customitemarray:
                 for i, c in world.customitemarray[p].items():
                     if c > 0:
