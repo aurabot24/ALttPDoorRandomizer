@@ -310,6 +310,7 @@ def do_main_shuffle(entrances, exits, avail, mode_def):
             if avail.swapped and len(bomb_shop_options) > 1:
                 bomb_shop_options = [x for x in bomb_shop_options if x != 'Big Bomb Shop']
 
+            bomb_shop_options.sort()
             bomb_shop_choice = random.choice(bomb_shop_options)
             connect_entrance(bomb_shop_choice, bomb_shop, avail)
             rem_entrances.remove(bomb_shop_choice)
@@ -341,7 +342,7 @@ def do_main_shuffle(entrances, exits, avail, mode_def):
         for ext in om_house:
             if ext in rem_exits:
                 world_limiter = DW_Entrances if avail.inverted else LW_Entrances
-                om_house_options = [x for x in rem_entrances if x in world_limiter and bonk_fairy_exception(avail, x)]
+                om_house_options = sorted([x for x in rem_entrances if x in world_limiter and bonk_fairy_exception(avail, x)])
                 om_house_choice = random.choice(om_house_options)
                 if not avail.coupled:
                     connect_exit(ext, om_house_choice, avail)
@@ -381,9 +382,16 @@ def do_main_shuffle(entrances, exits, avail, mode_def):
     if avail.swapped:
         rem_exits = [x for x in rem_exits if x in avail.exits]
     rem_exits.sort()
+    placing = min(len(rem_entrances), len(rem_exits))
     random.shuffle(rem_entrances)
     random.shuffle(rem_exits)
-    placing = min(len(rem_entrances), len(rem_exits))
+    # x = list(rem_entrances)
+    # y = list(rem_exits)
+    # x.sort()
+    # y.sort()
+    # print(f"entrances: {x}, exits: {y}")
+    # import pdb; pdb.set_trace()
+    # NOTE: Entrances and exits are consistent up to this pointplacing = min(len(rem_entrances), len(rem_exits))
     if avail.swapped:
         connect_swapped(rem_entrances, rem_exits, avail)
     else:
@@ -1547,6 +1555,7 @@ def do_mandatory_connections(avail, entrances, cave_options, must_exit):
         for e in swap_forbidden:
             entrances.remove(e)
     entrances.sort()  # sort these for consistency
+    cave_options.sort()
     random.shuffle(entrances)
     random.shuffle(cave_options)
 

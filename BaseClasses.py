@@ -1447,7 +1447,7 @@ class CollectionState(object):
 
     def can_superbunny_mirror_with_sword(self, player):
         return self.has_Mirror(player) and self.has_sword(player)
-    
+
     def can_bunny_pocket(self, player):
         return self.has_Boots(player) and (self.has_Mirror(player) or self.has_bottle(player))
 
