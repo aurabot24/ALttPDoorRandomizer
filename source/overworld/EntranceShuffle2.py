@@ -550,6 +550,7 @@ def do_holes_and_linked_drops(entrances, exits, avail, cross_world):
             if drop_map[hole] in exits:
                 leftover_hole_targets.append(drop_map[hole])
 
+    hole_entrances.sort()
     random.shuffle(hole_entrances)
     if not cross_world:
         if 'Sanctuary Grave' in holes_to_shuffle:
@@ -583,6 +584,7 @@ def do_holes_and_linked_drops(entrances, exits, avail, cross_world):
             chosen_entrance = next(e for e in hole_entrances if e[0] in sw_world_entrances)
             connect_hole_via_interior(chosen_entrance, 'Skull Woods Second Section Exit (East)', hole_entrances, hole_targets, entrances, exits, avail)
 
+    hole_targets.sort()
     random.shuffle(hole_targets)
     while len(hole_entrances):
         entrance, drop = hole_entrances.pop()
