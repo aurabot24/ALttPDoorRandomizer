@@ -1011,12 +1011,9 @@ def bomb_rules(world, player):
     # todo: kak well, pod hint (bonkable pots), hookshot pot, spike cave pots
     bonkable_doors = ['Two Brothers House Exit (West)', 'Two Brothers House Exit (East)'] # Technically this is incorrectly defined, but functionally the same as what is intended.
     bombable_doors = ['Ice Rod Cave', 'Light World Bomb Hut', 'Paradox Shop', 'Mini Moldorm Cave',
-                      'Hookshot Cave Back to Middle', 'Hookshot Cave Front to Middle', 'Hookshot Cave Middle to Front',
-                      'Hookshot Cave Middle to Back', 'Hookshot Cave Back to Fairy',  'Hookshot Cave Fairy to Back',
                       'Good Bee Cave Front to Back', 'Good Bee Cave Back to Front', 'Capacity Upgrade East',
                       'Capacity Fairy Pool West', 'Dark Lake Hylia Ledge Fairy', 'Hype Cave', 'Brewery',
-                      'Paradox Cave Chest Area NE', 'Blinds Hideout N', 'Kakariko Well (top to back)',
-                      'Light Hype Fairy']
+                      'Blinds Hideout N', 'Kakariko Well (top to back)', 'Light Hype Fairy']
     for entrance in bonkable_doors:
         add_rule(world.get_entrance(entrance, player), lambda state: state.can_use_bombs(player) or state.has_Boots(player))
         add_bunny_rule(world.get_entrance(entrance, player), player)
@@ -1034,10 +1031,34 @@ def bomb_rules(world, player):
         add_rule(world.get_location(location, player), lambda state: state.can_use_bombs(player))
         add_bunny_rule(world.get_location(location, player), player)
 
+    # Caves with both a light and dark world entrance, and a bombable wall, always require the Moon Pearl.
+    # Adding special logic for Paradox and Hookshot Cave to avert this.
+    front_hookshot_entrance = world.get_entrance("Hookshot Cave Front Exit", 1)
+    back_hookshot_entrance = world.get_entrance("Hookshot Cave Back Exit", 1)
+    hookshot_cave_front_to_back = ["Hookshot Cave Front to Middle", "Hookshot Cave Middle to Back", "Hookshot Cave Back to Fairy",  "Hookshot Cave Fairy to Back"]
+    hookshot_cave_back_to_front = ["Hookshot Cave Back to Middle", "Hookshot Cave Middle to Front", "Hookshot Cave Back to Fairy",  "Hookshot Cave Fairy to Back"]
+    for entrance in hookshot_cave_front_to_back:
+        add_rule(world.get_entrance(entrance, player), lambda state: state.can_use_bombs(player))
+        if not front_hookshot_entrance.connected_region.is_light_world:
+            add_bunny_rule(world.get_entrance(entrance, player), player)
+    for entrance in hookshot_cave_back_to_front:
+        add_rule(world.get_entrance(entrance, player), lambda state: state.can_use_bombs(player))
+        if not back_hookshot_entrance.connected_region.is_light_world:
+            add_bunny_rule(world.get_entrance(entrance, player), player)
+
+    paradox_exits = [world.get_entrance("Paradox Cave (Top)", player), world.get_entrance("Paradox Cave (Bottom)", player)]
+    if world.logic[player] != "noglitches":
+        paradox_exits.append(world.get_entrance("Paradox Cave Exit (Bottom)", player))
+    paradox_accessible_as_link = any(exit.connected_region.is_light_world for exit in paradox_exits)
+    add_rule(world.get_entrance("Paradox Cave Chest Area NE", player), lambda state: state.can_use_bombs(player))
+    if not paradox_accessible_as_link:
+        add_bunny_rule(world.get_entrance("Paradox Cave Chest Area NE", player), player)
+
     paradox_switch_chests = ['Paradox Cave Lower - Far Left', 'Paradox Cave Lower - Left', 'Paradox Cave Lower - Right', 'Paradox Cave Lower - Far Right', 'Paradox Cave Lower - Middle']
     for location in paradox_switch_chests:
         add_rule(world.get_location(location, player), lambda state: state.can_hit_crystal_through_barrier(player))
-        add_bunny_rule(world.get_location(location, player), player)
+        if not paradox_accessible_as_link:
+            add_bunny_rule(world.get_location(location, player), player)
 
     add_rule(world.get_location('Attic Cracked Floor', player), lambda state: state.can_use_bombs(player))
     bombable_floors = ['PoD Pit Room Bomb Hole', 'Ice Bomb Drop Hole', 'Ice Freezors Bomb Hole', 'GT Bob\'s Room Hole']
