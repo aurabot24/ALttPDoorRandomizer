@@ -12,6 +12,7 @@ from ... import RaceRandom as random
 from ...BaseClasses import LocationType, DoorType
 from ..overworld.FluteShuffle import default_flute_connections, flute_data
 from ..tools.MysteryUtils import roll_settings, get_weights
+from ..dungeon.EnemyList import sprite_translation
 
 
 class CustomSettings(object):
@@ -699,6 +700,27 @@ class CustomSettings(object):
 
     def record_medallions(self):
         pass
+
+    def record_enemies(self, world):
+        enemy_type_to_name = {v: k for k, v in sprite_translation.items()}
+        self.world_rep['enemies'] = enemies_data = {}
+        for p in self.player_range:
+            enemies_data[p] = {"Overworld": {}, "Underworld": {}}
+
+        for player in self.player_range:
+            ow_enemy_table = world.data_tables[player].ow_enemy_table
+            for room_id, enemies in ow_enemy_table.items():
+                enemies_data[player]["Overworld"][room_id] = {}
+                for i in range(len(enemies)):
+                    if enemies[i].kind in enemy_type_to_name:
+                        enemies_data[player]["Overworld"][room_id][i] = enemy_type_to_name[enemies[i].kind]
+
+            uw_enemy_table = world.data_tables[player].uw_enemy_table.room_map
+            for room_id, enemies in uw_enemy_table.items():
+                enemies_data[player]["Underworld"][room_id] = {}
+                for i in range(len(enemies)):
+                    if enemies[i].kind in enemy_type_to_name:
+                        enemies_data[player]["Underworld"][room_id][i] = enemy_type_to_name[enemies[i].kind]
 
     def write_to_file(self, destination):
         yaml.add_representer(defaultdict, Representer.represent_dict)

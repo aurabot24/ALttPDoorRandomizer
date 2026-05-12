@@ -89,7 +89,7 @@ def link_entrances_new(world, player):
     # setup mandatory connections
     for exit_name, region_name in mandatory_connections:
         connect_simple(world, exit_name, region_name, player)
-    
+
     connect_custom(avail_pool, world, player)
 
     if world.shuffle[player] == 'vanilla':
@@ -1915,6 +1915,8 @@ def connect_vanilla_two_way(entrancename, exit_name, avail):
 
 
 def connect_entrance(entrancename, exit_name, avail):
+    if entrancename not in avail.entrances:
+        return
     world, player = avail.world, avail. player
     entrance = world.get_entrance(entrancename, player)
     # check if we got an entrance or a region to connect to
@@ -1947,6 +1949,8 @@ def connect_entrance(entrancename, exit_name, avail):
 
 
 def connect_exit(exit_name, entrancename, avail):
+    if exit_name not in avail.exits or exit_name == "Chris Houlihan Room Exit":
+        return
     world, player = avail.world, avail.player
     entrance = world.get_entrance(entrancename, player)
     exit = world.get_entrance(exit_name, player)
@@ -1970,6 +1974,8 @@ def connect_exit(exit_name, entrancename, avail):
 
 
 def connect_two_way(entrancename, exit_name, avail):
+    if entrancename not in avail.entrances and exit_name not in avail.exits:
+        return
     world, player = avail.world, avail.player
 
     entrance = world.get_entrance(entrancename, player)

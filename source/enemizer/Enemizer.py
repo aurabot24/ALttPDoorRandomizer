@@ -345,12 +345,13 @@ def randomize_underworld_rooms(data_tables, world, player, custom_uw):
                         if wallmaster_chosen:
                             candidate_sprites = [x for x in candidate_sprites if x.sprite != EnemySprite.Wallmaster]
                         candidate_sprites = [x for x in candidate_sprites if not exceeds_sprite_limit(sprite_limit, x)]
+                        in_escape_sequence = room_id in [0x21, 0x71, 0x72, 0x80] and world.mode[player] == "standard"
                         if sprite.drops_item:
-                            forbidden = determine_forbidden(any_enemy_logic == 'none', room_id, True)
+                            forbidden = determine_forbidden(any_enemy_logic == 'none', room_id, in_escape_sequence, True)
                             choice_list = [x for x in candidate_sprites if x.good_for_key_drop(forbidden)]
                         # terrorpin, deadrock, buzzblob, lynel, redmimic/eyegore
                         elif room_id in shutter_sprites and i in shutter_sprites[room_id]:
-                            forbidden = determine_forbidden(any_enemy_logic != 'allow_all', room_id)
+                            forbidden = determine_forbidden(any_enemy_logic != 'allow_all', room_id, in_escape_sequence)
                             choice_list = [x for x in candidate_sprites if x.good_for_shutter(forbidden)]
                         else:
                             choice_list = [x for x in candidate_sprites if not x.water_only]
@@ -374,9 +375,16 @@ def randomize_underworld_rooms(data_tables, world, player, custom_uw):
     # done with rooms
 
 
-def determine_forbidden(forbid, room_id, drop_flag=False):
+def determine_forbidden(forbid, room_id, in_escape_sequence=False, drop_flag=False):
     forbidden_set = set()
-    if forbid:
+    if in_escape_sequence:
+        # Any enemies in the escape sequence should be killable with any starting weapon
+        forbidden_set.update({EnemySprite.Wallmaster, EnemySprite.Terrorpin, EnemySprite.Deadrock, EnemySprite.Buzzblob,
+                              EnemySprite.Lynel, EnemySprite.RedEyegoreMimic, EnemySprite.RedMimic, EnemySprite.RedBari,
+                              EnemySprite.HardhatBeetle, EnemySprite.StalfosKnight, EnemySprite.Wizzrobe, EnemySprite.Kodongo,
+                              EnemySprite.KodongoFire, EnemySprite.GreenEyegoreMimic, EnemySprite.Gibo, EnemySprite.Gibdo,
+                              EnemySprite.GreenMimic, EnemySprite.MiniHelmasaur})
+    elif forbid:
         forbidden_set.update({EnemySprite.Terrorpin, EnemySprite.Deadrock, EnemySprite.Buzzblob,
                               EnemySprite.Lynel, EnemySprite.RedEyegoreMimic, EnemySprite.RedMimic})
         if drop_flag:
