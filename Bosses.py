@@ -267,7 +267,8 @@ def place_bosses(world, player):
         else:  # all bosses present, the three duplicates chosen at random
             bosses = placeable_bosses + random.sample(placeable_bosses, 3)
         for u, level in used_bosses:
-            placeable_bosses.remove(u)
+            if u in placeable_bosses:
+                placeable_bosses.remove(u)
 
         logging.getLogger('').debug('Bosses chosen %s', bosses)
 

@@ -931,7 +931,7 @@ def customize_shops(world, player):
                 loc.item = upgrade
                 upgrade.location = loc
     change_shop_items_to_rupees(world, player, shops_to_customize)
-    balance_prices(world, player)
+    # balance_prices(world, player)  Loops infinitely if no shop can be reached without multiworld items, and doesn't make sense in multiworld regardless
     check_hints(world, player)
 
 
