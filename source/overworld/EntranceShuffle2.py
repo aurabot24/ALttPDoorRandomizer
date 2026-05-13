@@ -385,13 +385,6 @@ def do_main_shuffle(entrances, exits, avail, mode_def):
     placing = min(len(rem_entrances), len(rem_exits))
     random.shuffle(rem_entrances)
     random.shuffle(rem_exits)
-    # x = list(rem_entrances)
-    # y = list(rem_exits)
-    # x.sort()
-    # y.sort()
-    # print(f"entrances: {x}, exits: {y}")
-    # import pdb; pdb.set_trace()
-    # NOTE: Entrances and exits are consistent up to this pointplacing = min(len(rem_entrances), len(rem_exits))
     if avail.swapped:
         connect_swapped(rem_entrances, rem_exits, avail)
     else:
@@ -443,7 +436,7 @@ def do_blacksmith(entrances, exits, avail):
         assumed_inventory = list()
         if avail.world.logic[avail.player] in ['noglitches', 'minorglitches'] and (avail.world.is_tile_swapped(0x29, avail.player) == avail.inverted):
             assumed_inventory.append('Titans Mitts')
-        
+
         blacksmith_options = list()
         if not avail.world.is_bombshop_start(avail.player):
             links_region = avail.world.get_entrance('Links House Exit', avail.player).connected_region
@@ -452,7 +445,7 @@ def do_blacksmith(entrances, exits, avail):
         if links_region is not None:
             links_region = links_region.name
             blacksmith_options = list(get_accessible_entrances(links_region, avail, assumed_inventory, False, True, True))
-        
+
         if avail.world.is_dark_chapel_start(avail.player):
             dark_sanc = avail.world.get_entrance('Dark Sanctuary Hint Exit', avail.player).connected_region.name
             blacksmith_options = list(OrderedDict.fromkeys(blacksmith_options + list(get_accessible_entrances(dark_sanc, avail, assumed_inventory, False, True, True))))
@@ -462,7 +455,7 @@ def do_blacksmith(entrances, exits, avail):
                 blacksmith_options = list(OrderedDict.fromkeys(blacksmith_options + list(get_accessible_entrances(sanc_region.name, avail, assumed_inventory, False, True, True))))
             else:
                 logging.getLogger('').warning('Blacksmith is unable to use Sanctuary S&Q as initial accessibility because Sanctuary Exit has not been placed yet')
-        
+
         if avail.swapped:
             blacksmith_options = [e for e in blacksmith_options if e not in Forbidden_Swap_Entrances]
         blacksmith_options = [x for x in blacksmith_options if x in entrances]
