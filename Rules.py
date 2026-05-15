@@ -1773,7 +1773,9 @@ def standard_rules(world, player):
     def standard_escape_rule(state):
         return state.can_kill_most_things(player) or bomb_escape_rule()
 
-    add_item_rule(world.get_location('Link\'s Uncle', player), uncle_item_rule)
+    # We're handling this in the AP code. Also, how does this ever work?
+    # I feel like this rule should always fail with keysanity because you also need the escape keys to deliver Zelda
+    # add_item_rule(world.get_location('Link\'s Uncle', player), uncle_item_rule)
 
     # ensures the required weapon for escape lands on uncle (unless player has it pre-equipped)
     for location in ['Link\'s House', 'Sanctuary', 'Sewers - Secret Room - Left', 'Sewers - Secret Room - Middle',
