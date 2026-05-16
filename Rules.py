@@ -1118,9 +1118,12 @@ def challenge_room_rules(world, player):
                 add_rule_new(entrance, rule)
     for region, data in kill_chests.items():
         locations, room_id, enemy_list = data
-        rule = get_challenge_rule(world, player, room_map, stats, room_id, enemy_list, region)
-        for loc in locations:
-            add_rule_new(world.get_location(loc, player), rule)
+        # This is a terrible hard coded workaround for a bug where tile room is logically locked by killing the antifairy
+        # TODO: Is that a logic bug in OWR? Or have I done something weird?
+        if not "Ganons Tower - Tile Room" in locations:
+            rule = get_challenge_rule(world, player, room_map, stats, room_id, enemy_list, region)
+            for loc in locations:
+                add_rule_new(world.get_location(loc, player), rule)
 
 
 def get_challenge_rule(world, player, room_map, stats, room_id, enemy_list, region):
