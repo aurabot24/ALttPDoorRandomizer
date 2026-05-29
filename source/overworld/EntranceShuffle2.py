@@ -1292,6 +1292,11 @@ def handle_skull_woods_entrances(avail, pool):
     skull_woods = avail.world.skullwoods[avail.player]
     if skull_woods in ['restricted', 'original']:
         entrances, exits = find_entrances_and_exits(avail, pool)
+        if not entrances and not exits:
+            # The SW entrances have been set in the slot data and handled already
+            avail.skull_handled = True
+            return
+
         if avail.world.shuffle[avail.player] in ['dungeonssimple', 'simple', 'restricted'] \
                 and not avail.world.is_tile_swapped(0x00, avail.player):
             rem_ent = random.choice(['Skull Woods First Section Door', 'Skull Woods Second Section Door (East)'])
