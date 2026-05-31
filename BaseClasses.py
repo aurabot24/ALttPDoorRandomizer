@@ -1702,6 +1702,7 @@ class Entrance(object):
         self.door = None
         self.hide_path = False
         self.temp_path = []
+        self.checking_can_reach_thru = False  # Prevent infinite loops with walking big bomb to pyramid using a mirror path
 
     def can_reach(self, state):
                                 # Destination           Pickup                  OW Only  No Ledges  Can S&Q  Allow Mirror
@@ -1781,6 +1782,7 @@ class Entrance(object):
         explored_regions = {}
         exits_to_traverse = list()
         found = False
+        self.checking_can_reach_thru = True
         
         if not found and allow_mirror_reentry and state.has_Mirror(self.player):
             # check for path using mirror portal re-entry at location of the follower pickup
@@ -1837,7 +1839,7 @@ class Entrance(object):
                         or world.doorShuffle[self.player] == 'vanilla' or world.intensity[self.player] < 3:
                     traverse_paths(exit.connected_region, self.parent_region, [exit])
         
-        if not found and allow_mirror_reentry and state.has_Mirror(self.player):
+        if not found and allow_mirror_reentry and state.has_Mirror(self.player) and not self.checking_can_reach_thru:
             # check for paths using mirror portal re-entry at location of final destination
             # this is checked last as this is the most complicated/exhaustive check
             follower_region = start_region
@@ -1864,32 +1866,31 @@ class Entrance(object):
                             ignore_ledges = False
                             traverse_paths(mirror_exit.connected_region, start_region)
                             ignore_ledges = temp_ignore_ledges
-                            state.collect(mirror_item, True)
                             if found:
                                 path_to_pickup = self.temp_path
                                 # find path from follower pickup to placed mirror portal
                                 found = False
-                                state.remove(mirror_item)
                                 traverse_paths(follower_region, mirror_exit.connected_region)
-                                state.collect(mirror_item, True)
+                            state.collect(mirror_item, True)
                         mirror_map.pop(0)
                     if found:
                         path = state.path.get(self.parent_region, (self.parent_region.name, None))
                         path = (mirror_exit.name, path)
-                        
+
                         while len(path_to_pickup):
                             exit = path_to_pickup.pop(0)
                             path = (exit.name, (exit.parent_region.name, path))
                         item_name = step_location.item.name if step_location.item else 'Pick Up Item'
                         path = (f'{step_location.parent_region.name} Exit', (item_name, path))
-                        
+
                         while len(self.temp_path):
                             exit = self.temp_path.pop(0)
                             path = (exit.name, (exit.parent_region.name, path))
                         path = ('Use Mirror Portal', (mirror_exit.connected_region.name, path))
                         path = (self.parent_region.name, path)
                         state.path[self] = (self.name, path)
-        
+
+        self.checking_can_reach_thru = False
         return found
 
     def can_cause_bunny(self, player):

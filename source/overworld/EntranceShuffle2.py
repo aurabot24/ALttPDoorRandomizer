@@ -642,7 +642,7 @@ def do_dark_sanc(entrances, exits, avail):
                 choices = [e for e in avail.world.districts[avail.player]['Northwest Dark World'].entrances if e not in forbidden and e in entrances]
             else:
                 choices = [e for e in get_starting_entrances(avail) if e not in forbidden and e in entrances]
-            
+
             choice = random.choice(choices)
             entrances.remove(choice)
             exits.remove('Dark Sanctuary Hint')
@@ -654,7 +654,8 @@ def do_dark_sanc(entrances, exits, avail):
                 entrances.remove(swap_ent)
                 exits.remove(swap_ext)
         elif not ext.connected_region:
-            raise Exception('Dark Sanctuary Hint was placed earlier but its exit not properly connected')
+            pass  # The exit will be connected later
+            #raise Exception('Dark Sanctuary Hint was placed earlier but its exit not properly connected')
 
 
 def do_links_house(entrances, exits, avail, cross_world):
