@@ -1521,7 +1521,7 @@ def do_vanilla_connect(pool_def, avail):
             return
     defaults = {**default_connections, **(inverted_default_connections if avail.inverted != avail.world.is_tile_swapped(0x1b, avail.player) else open_default_connections)}
     for entrance in pool_def['entrances']:
-        if entrance in avail.entrances:
+        if entrance in avail.entrances and entrance in defaults:
             target = defaults[entrance]
             if entrance in avail.default_map:
                 connect_vanilla_two_way(entrance, avail.default_map[entrance], avail)
@@ -1593,6 +1593,8 @@ def do_mandatory_connections(avail, entrances, cave_options, must_exit):
                                                    or len(candidate) < len(entrances) - required_entrances):
                 if not avail.swapped or (avail.combine_map[exit] not in candidate and not any(e for e in must_exit if avail.combine_map[e] in candidate)): #maybe someday allow these, but we need to disallow mutual locks in Swapped
                     candidates.append(candidate)
+        if not candidates:
+            break
         cave = random.choice(candidates)
 
         if avail.swapped and len(candidates) > 1 and not avail.world.is_tile_swapped(0x03, avail.player):
@@ -1609,6 +1611,16 @@ def do_mandatory_connections(avail, entrances, cave_options, must_exit):
         # all caves are sorted so that the last exit is always reachable
         rnd_cave = list(cave)
         shuffle_connector_exits(rnd_cave)  # should be the same as unbiasing some entrances...
+
+        # TODO: Hardcoded values break doors?
+        # If the front and back exits of Turtle Rock are both must-exits, and small keys aren't shuffled, then it's impossible
+        # to place the small keys so they are all logically accessible. Thus, only one of the front and back exits can be a must-exit.
+        if turtle_rock_could_softlock(avail):
+            if (rnd_cave[-1] == "Turtle Rock Exit (Front)" and not "Turtle Rock Isolated Ledge Exit" in rnd_cave) or \
+               (rnd_cave[-1] == "Turtle Rock Isolated Ledge Exit" and not "Turtle Rock Exit (Front)" in rnd_cave):
+                # Move the caves around so one of TR front or back is not a must-exit
+                rnd_cave.insert(0, rnd_cave.pop())
+
         if avail.swapped and exit in swap_forbidden:
             swap_forbidden.remove(exit)
         else:
@@ -1665,17 +1677,18 @@ def do_mandatory_connections(avail, entrances, cave_options, must_exit):
                 used_caves.remove(cave)
             else:
                 required_entrances += len(cave)-1
-            if turtle_rock_could_softlock(avail) and (rnd_cave[-1] == "Turtle Rock Exit (Front)" or rnd_cave[-1] == "Turtle Rock Isolated Ledge Exit"):
-                # If the front and back exits of Turtle Rock are both must-exits, and small keys aren't shuffled, then it's impossible
-                # to place the small keys so they are all logically accessible. Thus, only one of the front and back exits can be a must-exit.
-                safe_exit = "Turtle Rock Exit (Front)" if rnd_cave[-1] == "Turtle Rock Isolated Ledge Exit" else "Turtle Rock Isolated Ledge Exit"
-                entrance = next(e for e in entrances[::-1] if e not in invalid_connections[exit]
-                                and e not in invalid_cave_connections[tuple(cave)] and e not in must_exit
-                                and (not avail.swapped or safe_exit != avail.combine_map[e])
-                                and bonk_fairy_exception(avail, e))
-                entrances.remove(entrance)
-                connect_two_way(entrance, safe_exit, avail)
-                rnd_cave.remove(safe_exit)
+            # TODO: Doors
+            # if turtle_rock_could_softlock(avail) and (rnd_cave[-1] == "Turtle Rock Exit (Front)" or rnd_cave[-1] == "Turtle Rock Isolated Ledge Exit"):
+            #     # If the front and back exits of Turtle Rock are both must-exits, and small keys aren't shuffled, then it's impossible
+            #     # to place the small keys so they are all logically accessible. Thus, only one of the front and back exits can be a must-exit.
+            #     safe_exit = "Turtle Rock Exit (Front)" if rnd_cave[-1] == "Turtle Rock Isolated Ledge Exit" else "Turtle Rock Isolated Ledge Exit"
+            #     entrance = next(e for e in entrances[::-1] if e not in invalid_connections[exit]
+            #                     and e not in invalid_cave_connections[tuple(cave)] and e not in must_exit
+            #                     and (not avail.swapped or safe_exit != avail.combine_map[e])
+            #                     and bonk_fairy_exception(avail, e))
+            #     entrances.remove(entrance)
+            #     connect_two_way(entrance, safe_exit, avail)
+            #     rnd_cave.remove(safe_exit)
             cave_options.append(rnd_cave[0:-1])
             random.shuffle(cave_options)
             used_caves.append(rnd_cave[0:-1])
