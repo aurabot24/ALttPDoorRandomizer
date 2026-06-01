@@ -297,6 +297,25 @@ def do_main_shuffle(entrances, exits, avail, mode_def):
     # blacksmith
     do_blacksmith(rem_entrances, rem_exits, avail)
 
+    # aga tower
+    if avail.world.mode[avail.player] == "inverted" and cross_world and avail.world.logic[avail.player] in ["noglitches", "minorglitches"]:
+        # It's possible for CT to be on top of Hyrule Castle, with no connectors, making it impossible to reach.
+        # For now, prevent CT from spawning on Hyrule Castle in crossed Inverted.
+        aga_tower = "Agahnims Tower Exit"
+        if aga_tower in rem_exits:
+            aga_options = [x for x in rem_entrances if x not in ["Hyrule Castle Entrance (West)", "Hyrule Castle Entrance (East)", "Agahnims Tower"]]
+            aga_options.sort()
+            aga_entrance = random.choice(aga_options)
+            connect_two_way(aga_entrance, aga_tower, avail)
+            rem_entrances.remove(aga_entrance)
+            if avail.swapped:
+                swap_ent, swap_ext = connect_swap(aga_entrance, aga_tower, avail)
+                rem_exits.remove(swap_ext)
+                rem_entrances.remove(swap_ent)
+            if not avail.coupled:
+                avail.decoupled_exits.remove(aga_tower)
+            rem_exits.remove(aga_tower)
+
     # bomb shop
     if not avail.world.is_bombshop_start(avail.player):
         bomb_shop = 'Big Bomb Shop'
