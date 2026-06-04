@@ -383,7 +383,7 @@ def determine_forbidden(forbid, room_id, in_escape_sequence=False, drop_flag=Fal
                               EnemySprite.Lynel, EnemySprite.RedEyegoreMimic, EnemySprite.RedMimic, EnemySprite.RedBari,
                               EnemySprite.HardhatBeetle, EnemySprite.StalfosKnight, EnemySprite.Wizzrobe, EnemySprite.Kodongo,
                               EnemySprite.KodongoFire, EnemySprite.GreenEyegoreMimic, EnemySprite.Gibo, EnemySprite.Gibdo,
-                              EnemySprite.GreenMimic, EnemySprite.MiniHelmasaur})
+                              EnemySprite.GreenMimic, EnemySprite.MiniHelmasaur, EnemySprite.AntiFairy, EnemySprite.AntiFairyCircle})
     elif forbid:
         forbidden_set.update({EnemySprite.Terrorpin, EnemySprite.Deadrock, EnemySprite.Buzzblob,
                               EnemySprite.Lynel, EnemySprite.RedEyegoreMimic, EnemySprite.RedMimic})

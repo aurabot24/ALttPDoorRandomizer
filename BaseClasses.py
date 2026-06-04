@@ -507,11 +507,11 @@ class World(object):
         self.precollected_items.append(item)
         self.state.collect(item, True)
 
-    def push_item(self, location, item, collect=True):
+    def push_item(self, location, item, collect=True, skip_access_check=False):
         if not isinstance(location, Location):
             raise RuntimeError('Cannot assign item %s to location %s (player %d).' % (item, location, item.player))
 
-        if location.can_fill(self.state, item, False):
+        if skip_access_check or location.can_fill(self.state, item, False):
             location.item = item
             item.location = location
             item.world = self
