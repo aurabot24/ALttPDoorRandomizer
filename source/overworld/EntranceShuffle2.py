@@ -1409,7 +1409,7 @@ def do_same_world_shuffle(avail, pool_def):
         nonlocal multi_exits_caves
         candidates = filter_restricted_caves(multi_exits_caves, restriction, avail)
         other_candidates = [x for x in multi_exits_caves if x not in candidates]  # remember those not passed in
-        do_mandatory_connections(avail, world_entrances, candidates, world_must_exits)
+        do_mandatory_connections(avail, world_entrances, candidates, world_must_exits, restriction)
         multi_exits_caves = (other_candidates + candidates) if other_candidates else candidates  # rebuild list from the candidates and those not passed
 
     determine_dungeon_restrictions(avail)
@@ -1552,7 +1552,7 @@ def do_vanilla_connect(pool_def, avail):
 def bonk_fairy_exception(avail, x):  # (Bonk Fairy not eligible in standard)
     return not avail.is_standard() or x != 'Bonk Fairy (Light)'
 
-def do_mandatory_connections(avail, entrances, cave_options, must_exit):
+def do_mandatory_connections(avail, entrances, cave_options, must_exit, restriction=None):
     if len(must_exit) == 0:
         return
     if not avail.coupled:
@@ -1612,9 +1612,13 @@ def do_mandatory_connections(avail, entrances, cave_options, must_exit):
                                                    or len(candidate) < len(entrances) - required_entrances):
                 if not avail.swapped or (avail.combine_map[exit] not in candidate and not any(e for e in must_exit if avail.combine_map[e] in candidate)): #maybe someday allow these, but we need to disallow mutual locks in Swapped
                     candidates.append(candidate)
-        if not candidates:
+        restricted_candidates = [candidate for candidate in candidates if any([exit in avail.same_world_restricted and avail.same_world_restricted[exit] == restriction for exit in candidate])]
+        if restricted_candidates:
+            cave = random.choice(restricted_candidates)
+        elif candidates:
+            cave = random.choice(candidates)
+        else:
             break
-        cave = random.choice(candidates)
 
         if avail.swapped and len(candidates) > 1 and not avail.world.is_tile_swapped(0x03, avail.player):
             DM_Connector_Prefixes = ['Spectacle Rock Cave', 'Old Man House', 'Death Mountain Return']
