@@ -759,7 +759,7 @@ def do_links_house(entrances, exits, avail, cross_world):
         if links_house in dm_spots and avail.world.owLayout[avail.player] == 'vanilla':
             if avail.links_on_mountain:
                 return  # connector is fine
-            logging.getLogger('').warning(f'Links House is placed in tight area and is now unhandled. Report any errors that occur from here.')
+            #logging.getLogger('').warning(f'Links House is placed in tight area and is now unhandled. Report any errors that occur from here.')
             return
             if avail.world.shuffle[avail.player] in ['lite', 'lean']:
                 rem_exits = [e for e in avail.exits if e in Connector_Exit_Set and e not in Dungeon_Exit_Set]
