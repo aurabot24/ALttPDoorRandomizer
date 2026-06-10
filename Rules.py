@@ -599,9 +599,9 @@ def global_rules(world, player):
 
     set_rule(world.get_entrance('Swamp Lobby Moat', player), lambda state: state.has('Flippers', player) and state.has('Open Floodgate', player))
     set_rule(world.get_entrance('Swamp Entrance Moat', player), lambda state: state.has('Flippers', player) and state.has('Open Floodgate', player))
-    set_rule(world.get_entrance('Swamp Trench 1 Approach Dry', player), lambda state: not state.has('Trench 1 Filled', player))
-    set_rule(world.get_entrance('Swamp Trench 1 Key Ledge Dry', player), lambda state: not state.has('Trench 1 Filled', player))
-    set_rule(world.get_entrance('Swamp Trench 1 Departure Dry', player), lambda state: not state.has('Trench 1 Filled', player))
+    # set_rule(world.get_entrance('Swamp Trench 1 Approach Dry', player), lambda state: not state.has('Trench 1 Filled', player))
+    # set_rule(world.get_entrance('Swamp Trench 1 Key Ledge Dry', player), lambda state: not state.has('Trench 1 Filled', player))
+    # set_rule(world.get_entrance('Swamp Trench 1 Departure Dry', player), lambda state: not state.has('Trench 1 Filled', player))
     # these two are here so that, if they flood the area before finding flippers, nothing behind there can lock out the flippers
     set_rule(world.get_entrance('Swamp Trench 1 Nexus Approach', player), lambda state: state.has('Flippers', player))
     set_rule(world.get_entrance('Swamp Trench 1 Nexus Key', player), lambda state: state.has('Flippers', player))
@@ -615,7 +615,7 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Swamp Hub Hook Path', player), lambda state: state.has('Hookshot', player))
     set_rule(world.get_entrance('Swamp Hub Side Hook Path', player), lambda state: state.has('Hookshot', player))
     set_rule(world.get_location('Swamp Palace - Hookshot Pot Key', player), lambda state: state.has('Hookshot', player))
-    set_rule(world.get_entrance('Swamp Trench 2 Pots Dry', player), lambda state: not state.has('Trench 2 Filled', player))
+    set_rule(world.get_entrance('Swamp Trench 2 Pots Dry', player), lambda state: not state.has('Trench 2 Filled', player) or (state.can_hit_crystal(player) and world.get_entrance("Swamp Crystal Switch SE", 1).access_rule(state)))
     set_rule(world.get_entrance('Swamp Trench 2 Pots Wet', player), lambda state: state.has('Flippers', player) and state.has('Trench 2 Filled', player))
     set_rule(world.get_entrance('Swamp Trench 2 Departure Wet', player), lambda state: state.has('Flippers', player) and state.has('Trench 2 Filled', player))
     set_rule(world.get_entrance('Swamp West Ledge Hook Path', player), lambda state: state.has('Hookshot', player))
