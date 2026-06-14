@@ -55,7 +55,7 @@ def set_rules(world, player):
 
     if world.mode[player] == 'standard':
         standard_rules(world, player)
-    else:
+    elif world.doorShuffle[player] == "vanilla":
         misc_key_rules(world, player)
 
     bomb_rules(world, player)
