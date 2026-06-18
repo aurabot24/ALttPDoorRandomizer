@@ -1467,6 +1467,11 @@ def validate_key_layout(key_layout, world, player):
     if world.logic[player] == 'nologic' or (world.keyshuffle[player] == 'universal' and
        (world.mode[player] != 'standard' or key_layout.sector.name != 'Hyrule Castle')):
         return True
+
+    if world.customizer and world.customizer.get_doors():
+        # All doors have already been set and verified
+        return True
+
     flat_proposal = key_layout.flat_prop
     state = ExplorationState(dungeon=key_layout.sector.name)
     state.init_zelda_event_doors(key_layout.event_starts, player)

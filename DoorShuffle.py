@@ -851,6 +851,7 @@ def create_dungeon_entrances(world, player):
                 else:
                     the_rest.append(portal)
             choices = list(split_portals[key])
+            choices.sort()
             for portal in dead_ends:
                 choice = random.choice(choices)
                 choices.remove(choice)
@@ -875,6 +876,7 @@ def create_dungeon_entrances(world, player):
                     filtered_choices = dest_choices
                 if len(filtered_choices) == 0:
                     raise Exception('No valid destinations')
+                filtered_choices.sort()
                 choice = random.choice(filtered_choices)
                 r_name = portal.door.entrance.parent_region.name
                 split_map[key][choice].append(r_name)
@@ -1136,7 +1138,7 @@ def main_dungeon_generation(dungeon_builders, recombinant_builders, connections_
     logging.getLogger('').info(world.fish.translate("cli", "cli", "generating.dungeon"))
     while len(sector_queue) > 0:
         builder = sector_queue.popleft()
-        split_dungeon = (builder.name.startswith('Desert Palace') or builder.name.startswith('Skull Woods')
+        split_dungeon = (builder.name.startswith('Desert Palace ') or builder.name.startswith('Skull Woods ')
                          or (builder.name.startswith('Hyrule Castle') and world.mode[player] == 'standard'))
         name = builder.name
         if split_dungeon:
