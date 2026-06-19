@@ -2905,10 +2905,13 @@ def find_valid_bd_combination(builder, suggested, world, player):
             dash_doors_needed -= 1
             if dash_doors_needed < 0:
                 dash_doors_needed = 0
-    bomb_proposal = random.sample(bd_door_pool, k=bomb_doors_needed)
+
+    bomb_doors_needed = max(bomb_doors_needed, 0)
+    dash_doors_needed = max(dash_doors_needed, 0)
+    bomb_proposal = random.sample(bd_door_pool, k=min(len(bd_door_pool), bomb_doors_needed))
     bomb_proposal.extend(custom_bomb_doors)
     dash_pool = [x for x in bd_door_pool if x not in bomb_proposal]
-    dash_proposal = random.sample(dash_pool, k=dash_doors_needed)
+    dash_proposal = random.sample(dash_pool, k=min(len(dash_pool), dash_doors_needed))
     dash_proposal.extend(custom_dash_doors)
     return bomb_proposal, dash_proposal, ttl_needed
 
