@@ -1304,7 +1304,7 @@ def simple_dungeon_builder(name, sector_list):
 def create_dungeon_builders(all_sectors, connections_tuple, world, player, dungeon_pool,
                             dungeon_entrances=None, split_dungeon_entrances=None):
     logger = logging.getLogger('')
-    logger.info('Shuffling Dungeon Sectors')
+    #logger.info('Shuffling Dungeon Sectors')
 
     if dungeon_entrances is None:
         dungeon_entrances = default_dungeon_entrances
@@ -1425,7 +1425,7 @@ def create_dungeon_builders(all_sectors, connections_tuple, world, player, dunge
             if not global_pole.is_valid(dungeon_map):
                 # restart
                 raise NeutralizingException('Either free location/crystal assignment is already globally invalid')
-            logger.info(world.fish.translate("cli", "cli", "balance.doors"))
+            #logger.info(world.fish.translate("cli", "cli", "balance.doors"))
             builder_info = dungeon_entrances, split_dungeon_entrances, connections_tuple, world, player
             assign_polarized_sectors(dungeon_map, polarized_sectors, global_pole, builder_info)
             # the rest
@@ -2330,7 +2330,7 @@ def parallel_full_neutralization(dungeon_map, polarized_sectors, global_pole):
             increment_depth = True
         current_depth = last_depth + 1 if increment_depth else last_depth
         finished = all([(x.polarity()+sum_polarity(solution_list[x])).is_neutral() for x in builders])
-    logging.getLogger('').info(f'-Balanced solution found in {time.process_time()-start}')
+    #logging.getLogger('').info(f'-Balanced solution found in {time.process_time()-start}')
     for builder, sectors in solution_list.items():
         for sector in sectors:
             assign_sector(sector, builder, polarized_sectors, global_pole)

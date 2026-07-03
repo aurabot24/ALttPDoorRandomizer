@@ -1135,7 +1135,7 @@ def main_dungeon_generation(dungeon_builders, recombinant_builders, connections_
     enabled_entrances = world.enabled_entrances[player] = {}
     sector_queue = deque(dungeon_builders.values())
     last_key, loops = None, 0
-    logging.getLogger('').info(world.fish.translate("cli", "cli", "generating.dungeon"))
+    #logging.getLogger('').info(world.fish.translate("cli", "cli", "generating.dungeon"))
     while len(sector_queue) > 0:
         builder = sector_queue.popleft()
         split_dungeon = (builder.name.startswith('Desert Palace ') or builder.name.startswith('Skull Woods ')

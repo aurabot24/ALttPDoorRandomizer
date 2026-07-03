@@ -480,7 +480,7 @@ def refine_placement_rules(key_layout, max_ctr):
                 #         rules_to_remove.append(rule)
                 #         changed = True
                 if rule.needed_keys_w_bk > key_layout.max_chests or len(rule.check_locations_w_bk) < rule.needed_keys_w_bk:
-                    logging.getLogger('').warning('Invalid rule - what went wrong here??')
+                    #logging.getLogger('').warning('Invalid rule - what went wrong here??')
                     rules_to_remove[rule] = None
                     changed = True
             if rule.bk_conditional_set is not None:

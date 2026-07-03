@@ -823,7 +823,7 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Hera Back to Front Barrier - Orange', player), lambda state: state.can_reach_orange(world.get_region('Hera Back', player), player))
     set_rule(world.get_location('Tower of Hera - Basement Cage', player), lambda state: state.can_reach_orange(world.get_region('Hera Basement Cage', player), player))
     set_rule(world.get_entrance('Hera Tridorm WN', player), lambda state: state.can_reach_blue(world.get_region('Hera Tridorm', player), player))
-    set_rule(world.get_entrance('Hera Tridorm SE', player), lambda state: state.can_reach_orange(world.get_region('Hera Tridorm', player), player))
+    #set_rule(world.get_entrance('Hera Tridorm SE', player), lambda state: state.can_reach_orange(world.get_region('Hera Tridorm', player), player))
     set_rule(world.get_entrance('Hera Tile Room EN', player), lambda state: state.can_reach_blue(world.get_region('Hera Tile Room', player), player))
 
     set_rule(world.get_entrance('Hera Lobby to Crystal', player), lambda state: state.can_hit_crystal(player))
