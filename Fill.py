@@ -130,7 +130,7 @@ def fill_dungeons_restrictive(world, shuffled_locations):
                 prize_state_base.collect(x, True)
             fill(prize_state_base, prizes, shuffled_locations)
         except FillError as e:
-            logging.getLogger('').info("Failed to place dungeon prizes (%s). Will retry %s more times", e, 14 - attempt)
+            #logging.getLogger('').info("Failed to place dungeon prizes (%s). Will retry %s more times", e, 14 - attempt)
             prizes = prizes_copy.copy()
             for dungeon in world.dungeons:
                 dungeon.prize = None
