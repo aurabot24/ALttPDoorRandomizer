@@ -2788,7 +2788,7 @@ def find_valid_combination(builder, target, start_regions, world, player, drop_k
             if not drop_keys:
                 logger.info('No valid layouts for %s with %s doors', builder.name, builder.key_doors_num)
                 return None, 0
-            logger.info('%s: %s', world.fish.translate("cli","cli","lowering.keys.layouts"), builder.name)
+            #logger.info('%s: %s', world.fish.translate("cli","cli","lowering.keys.layouts"), builder.name)
             builder.key_doors_num -= 1
             key_doors_needed -= 1
             if key_doors_needed < 0:
