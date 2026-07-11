@@ -1301,10 +1301,16 @@ def simple_dungeon_builder(name, sector_list):
     return builder
 
 
+def check_timeout(start_time):
+    if start_time and (time.time() - start_time) >= 10:
+        raise TimeoutError("Dungeon generation is taking too long.")
+
+
 def create_dungeon_builders(all_sectors, connections_tuple, world, player, dungeon_pool,
                             dungeon_entrances=None, split_dungeon_entrances=None):
     logger = logging.getLogger('')
     #logger.info('Shuffling Dungeon Sectors')
+    start_time = time.time()
 
     if dungeon_entrances is None:
         dungeon_entrances = default_dungeon_entrances
@@ -1313,6 +1319,7 @@ def create_dungeon_builders(all_sectors, connections_tuple, world, player, dunge
     define_sector_features(all_sectors)
     finished, dungeon_map, attempts = False, {}, 0
     while not finished:
+        check_timeout(start_time)
         candidate_sectors = dict.fromkeys(all_sectors)
         global_pole = GlobalPolarity(candidate_sectors)
 
@@ -1427,7 +1434,7 @@ def create_dungeon_builders(all_sectors, connections_tuple, world, player, dunge
                 raise NeutralizingException('Either free location/crystal assignment is already globally invalid')
             #logger.info(world.fish.translate("cli", "cli", "balance.doors"))
             builder_info = dungeon_entrances, split_dungeon_entrances, connections_tuple, world, player
-            assign_polarized_sectors(dungeon_map, polarized_sectors, global_pole, builder_info)
+            assign_polarized_sectors(dungeon_map, polarized_sectors, global_pole, builder_info, start_time)
             # the rest
             assign_the_rest(dungeon_map, neutral_sectors, global_pole, builder_info)
             dungeon_map.update(complete_dungeons)
@@ -2130,10 +2137,11 @@ def sum_polarity(sector_list):
     return pol
 
 
-def assign_polarized_sectors(dungeon_map, polarized_sectors, global_pole, builder_info):
+def assign_polarized_sectors(dungeon_map, polarized_sectors, global_pole, builder_info, start_time=None):
     # step 1: fix polarity connection issues
     unconnected_builders = identify_polarity_issues(dungeon_map)
     while len(unconnected_builders) > 0:
+        check_timeout(start_time)
         for name, builder in unconnected_builders.items():
             candidates = find_connection_candidates(builder.mag_needed, polarized_sectors)
             valid, sector = False, None
@@ -2150,6 +2158,7 @@ def assign_polarized_sectors(dungeon_map, polarized_sectors, global_pole, builde
     # step 2: fix dead ends
     problem_builders = identify_simple_branching_issues(dungeon_map)
     while len(problem_builders) > 0:
+        check_timeout(start_time)
         for name, builder in problem_builders.items():
             candidates, charges = find_simple_branching_candidates(builder, polarized_sectors)
             best = min(charges)
@@ -2173,14 +2182,15 @@ def assign_polarized_sectors(dungeon_map, polarized_sectors, global_pole, builde
         problem_builders = identify_simple_branching_issues(problem_builders)
 
     # step 3: fix neutrality issues
-    polarity_step_3(dungeon_map, polarized_sectors, global_pole)
+    polarity_step_3(dungeon_map, polarized_sectors, global_pole, start_time)
 
     # step 4: fix dead ends again
     neutral_choices: List[List] = neutralize_the_rest(polarized_sectors)
     problem_builders = identify_branching_issues(dungeon_map, builder_info)
     while len(problem_builders) > 0:
         for name, builder in problem_builders.items():
-            candidates = find_branching_candidates(builder, neutral_choices, builder_info)
+            check_timeout(start_time)
+            candidates = find_branching_candidates(builder, neutral_choices, builder_info, start_time)
             valid, choice, package = False, None, None
             while not valid:
                 if len(candidates) <= 0:
@@ -2206,6 +2216,7 @@ def assign_polarized_sectors(dungeon_map, polarized_sectors, global_pole, builde
     while len(polarized_sectors) > 0:
         if tries > 1000 or (combinations and tries >= len(combinations)):
             raise GenerationException('No valid assignment found. Ref: %s' % next(iter(dungeon_map.keys())))
+        check_timeout(start_time)
         if combinations:
             choices = combinations[tries]
         else:
@@ -2215,6 +2226,7 @@ def assign_polarized_sectors(dungeon_map, polarized_sectors, global_pole, builde
             chosen_sectors[choice].extend(neutral_choices[i])
         all_valid, package_map = True, {}
         for name, sector_list in chosen_sectors.items():
+            check_timeout(start_time)
             flag, package = valid_assignment(dungeon_map[name], sector_list, builder_info)
             if not flag:
                 all_valid = False
@@ -2231,7 +2243,7 @@ def assign_polarized_sectors(dungeon_map, polarized_sectors, global_pole, builde
         tries += 1
 
 
-def polarity_step_3(dungeon_map, polarized_sectors, global_pole):
+def polarity_step_3(dungeon_map, polarized_sectors, global_pole, start_time=None):
     # step 3a: fix odd builders
     odd_builders = [x for x in dungeon_map.values() if sum_polarity(x.sectors).charge() % 2 != 0]
     grouped_choices: List[List] = find_forced_groupings(polarized_sectors, dungeon_map)
@@ -2241,6 +2253,7 @@ def polarity_step_3(dungeon_map, polarized_sectors, global_pole):
     while len(odd_builders) > 0:
         if tries > 1000:
             raise GenerationException('Unable to fix dungeon parity. Ref: %s' % next(iter(odd_builders)).name)
+        check_timeout(start_time)
         best_choices = None
         best_charge = sum([x.polarity().charge() for x in dungeon_map.values()])
         samples = 0
@@ -2737,10 +2750,10 @@ def weed_candidates(builder, candidates, best_charge):
     return cand_len
 
 
-def find_branching_candidates(builder, neutral_choices, builder_info):
+def find_branching_candidates(builder, neutral_choices, builder_info, start_time=None):
     candidates = []
     for choice in neutral_choices:
-        resolved, problem_list, package = check_for_valid_layout(builder, choice, builder_info)
+        resolved, problem_list, package = check_for_valid_layout(builder, choice, builder_info, start_time)
         if resolved:
             candidates.append((choice, package))
     return candidates
@@ -3546,7 +3559,7 @@ def identify_branching_issues(dungeon_map, builder_info):
     return unconnected_builders
 
 
-def check_for_valid_layout(builder, sector_list, builder_info):
+def check_for_valid_layout(builder, sector_list, builder_info, start_time=None):
     dungeon_entrances, split_dungeon_entrances, c_tuple, world, player = builder_info
     if builder.name in split_dungeon_entrances.keys():
         try:
@@ -3577,6 +3590,7 @@ def check_for_valid_layout(builder, sector_list, builder_info):
                                 entrance_regions.append(r_name)
                 # entrance_regions = [x for x in entrance_regions if x not in split_check_entrance_invalid]
                 split = any(x for x in independents if x not in entrance_regions)
+                check_timeout(start_time)
                 proposal = generate_dungeon_find_proposal(split_build, entrance_regions, split, world, player)
                 # record split proposals
                 builder.valid_proposal[name] = proposal

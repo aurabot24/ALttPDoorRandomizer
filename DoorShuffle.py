@@ -2802,7 +2802,7 @@ def find_valid_combination(builder, target, start_regions, world, player, drop_k
         key_layout.reset(proposal, builder, world, player)
         if (itr+1) % 1000 == 0:
             mark = time.process_time()-start
-            logger.info('%s time elapsed. %s iterations/s', mark, itr/mark)
+            #logger.info('%s time elapsed. %s iterations/s', mark, itr/mark)
     # make changes
     if player not in world.key_logic.keys():
         world.key_logic[player] = {}

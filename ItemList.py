@@ -798,7 +798,7 @@ def fill_prizes(world, attempts=15):
                     prize_loc.parent_region.dungeon.prize = prize_loc.item
                     prize_loc.item.dungeon_object = prize_loc.parent_region.dungeon
             except FillError as e:
-                logging.getLogger('').info("Failed to place dungeon prizes (%s). Will retry %s more times", e, attempts - attempt - 1)
+                #logging.getLogger('').info("Failed to place dungeon prizes (%s). Will retry %s more times", e, attempts - attempt - 1)
                 for location in empty_crystal_locations:
                     location.item = None
                 continue
