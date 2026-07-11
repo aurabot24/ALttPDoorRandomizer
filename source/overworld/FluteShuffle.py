@@ -110,7 +110,7 @@ def shuffle_flute_spots(world, player):
             if not already_has_spot:
                 empty_sector_total += 1
         if flute_spots < empty_sector_total:
-            logging.getLogger('').warning(f'Warning: Not every sector can have a flute spot, generation might fail')
+            #logging.getLogger('').warning(f'Warning: Not every sector can have a flute spot, generation might fail')
             # pretend like some of the empty sectors already have a flute spot, don't know if they will be reachable
             for i in range(len(flute_sectors)):
                 if not sector_has_spot[i]:
