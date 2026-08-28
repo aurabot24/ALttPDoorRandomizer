@@ -45,10 +45,10 @@ from .source.enemizer.Enemizer import write_enemy_shuffle_settings
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '17e19fe2d62915e58dcf31e71524ce29'
+RANDOMIZERBASEHASH = '7ce8b9ca676b5f785d55f07881d440f8'
 
 limited_run_hashes = {
-    '2604' : 'b642538db5d6d0149ece7c9df988ac8a',
+    '2604' : 'b2b6df656c715ef25a483c99341c0297',
 }
 
 class JsonRom(object):
@@ -489,10 +489,8 @@ def patch_rom(world, rom, player, team, is_mystery=False, rom_header=None, hint_
                 else:
                     itemid = 0x5A
 
-        if not location.locked and ((location.item.smallkey and world.keyshuffle[player] == 'none') or (
-            location.item.bigkey and world.bigkeyshuffle[player] == 'none') or (
-            location.item.map and world.mapshuffle[player] == 'none') or (
-            location.item.compass and world.compassshuffle[player] == 'none')):
+        if (not location.locked and location.item
+                and location.item.is_inside_dungeon_item(world)):
             itemid = handle_native_dungeon(location, itemid)
 
         rom.write_byte(location.address, itemid)
