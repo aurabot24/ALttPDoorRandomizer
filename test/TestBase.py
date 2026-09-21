@@ -54,13 +54,12 @@ def make_bare_world(logic='noglitches', mode='open', shuffle='vanilla', door_shu
     return world
 
 
-def make_logic_test_world(logic='noglitches', mode='open'):
-    """Vanilla ER/DR world through set_rules, for location/entrance access tests."""
-    cache_key = (logic, mode)
-    cached = _world_cache.get(cache_key)
-    if cached is not None:
-        return cached
+def build_vanilla_world(mode='open', logic='noglitches', customizer=None, key_logic='partial'):
+    """Vanilla overworld and doors through set_rules.
 
+    key_logic is the key logic algorithm. customizer is a CustomSettings object
+    already filled in memory, for the key-logic plando tests.
+    """
     import RaceRandom as random
     from DoorShuffle import link_doors, link_doors_prep
     from Doors import create_doors
@@ -87,8 +86,11 @@ def make_logic_test_world(logic='noglitches', mode='open'):
         '--ow_layout', 'vanilla',
         '--intensity', '1',
         '--spoiler', 'none',
+        '--key_logic_algorithm', key_logic,
     ])
     world = init_world(args, BabelFish(lang='en'))
+    if customizer is not None:
+        world.customizer = customizer
     world.seed = 1
     random.seed(1)
     resolve_random_settings(world, args)
@@ -125,6 +127,16 @@ def make_logic_test_world(logic='noglitches', mode='open'):
         world.itempool.append(ItemFactory('Pegasus Boots', 1))
     mark_light_dark_world_regions(world, 1)
     set_rules(world, 1)
+    return world
+
+
+def make_logic_test_world(logic='noglitches', mode='open'):
+    """Cached vanilla world for the location and entrance access tests."""
+    cache_key = (logic, mode)
+    cached = _world_cache.get(cache_key)
+    if cached is not None:
+        return cached
+    world = build_vanilla_world(mode=mode, logic=logic)
     _world_cache[cache_key] = world
     return world
 
