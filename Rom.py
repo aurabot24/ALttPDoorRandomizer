@@ -30,9 +30,11 @@ from .Text import Lumberjacks_texts, SickKid_texts, FluteBoy_texts, Zora_texts, 
 from .source.classes.ContributorCredits import get_credits_data
 from .Utils import local_path, int16_as_bytes, int32_as_bytes, snes_to_pc
 from .Items import ItemFactory, prize_item_table
-from .source.overworld.EntranceData import door_addresses, ow_prize_table
+from .source.overworld.EntranceData import door_addresses, get_door_addresses, get_ow_prize_coords
 from .source.overworld.EntranceShuffle2 import exit_ids
 from .source.overworld.FluteShuffle import default_flute_connections, flute_data
+from .source.overworld.OWMap import apply_ow_map_assets
+from .source.overworld.OWTileChanges import write_static_map_changes
 from .InitialSram import InitialSram
 
 from .source.classes.SFX import randomize_sfx, randomize_sfxinstruments, randomize_songinstruments
@@ -45,10 +47,10 @@ from .source.enemizer.Enemizer import write_enemy_shuffle_settings
 
 
 JAP10HASH = '03a63945398191337e896e5771f77173'
-RANDOMIZERBASEHASH = '7ce8b9ca676b5f785d55f07881d440f8'
+RANDOMIZERBASEHASH = 'eb1061713867a4a9454bcc44933126ca'
 
 limited_run_hashes = {
-    '2604' : 'b2b6df656c715ef25a483c99341c0297',
+    '2604' : 'f6db6681f0e28e8463c2cc9ac3a07f07',
 }
 
 class JsonRom(object):
@@ -581,6 +583,7 @@ def patch_rom(world, rom, player, team, is_mystery=False, rom_header=None, hint_
             rom.write_byte(0x153D00 + cell_id % 0x40, pos)
         for pos, cell_id in enumerate(sum(grid[1], [])):
             rom.write_byte(0x153D40 + cell_id % 0x40, pos)
+        apply_ow_map_assets(rom)  # OW Map GFX ($18C000) + LW/DW tilemaps ($0AC739 / $0AD739)
     elif world.owMixed[player]:
         owFlags |= 0x02
         owFog = 1
@@ -1497,10 +1500,11 @@ def patch_rom(world, rom, player, team, is_mystery=False, rom_header=None, hint_
                     if owid in [0x00, 0x03, 0x05, 0x18, 0x1B, 0x1E, 0x30, 0x35]:
                         coords = (coords[0] + 0x100, coords[1] + 0x100)
         else:
-            if ent.name in ow_prize_table:
-                coords = ow_prize_table[ent.name]
-            elif door_addresses[ent.name][1] is not None:
-                coords = (door_addresses[ent.name][1][6], door_addresses[ent.name][1][5])
+            prize_coords = get_ow_prize_coords(ent.name, world, player)
+            if prize_coords is not None:
+                coords = prize_coords
+            elif get_door_addresses(ent, world, player)[1] is not None:
+                coords = (get_door_addresses(ent, world, player)[1][6], get_door_addresses(ent, world, player)[1][5])
             else:
                 raise Exception(f"No overworld map coordinates for entrance {ent.name}")
         map_x, map_y = adjust_ow_coordinates_to_layout(world, player, coords[0], coords[1], ent.parent_region.type == RegionType.DarkWorld)
@@ -2491,7 +2495,7 @@ def write_strings(rom, world, player, team, multiworld_hint_text={}):
             entrances_to_hint.update(InsanityEntrances)
             if world.shuffle_ganon[player]:
                 if world.is_tile_swapped(0x1b, player):
-                    entrances_to_hint.update({'Inverted Pyramid Entrance': 'The extra castle passage'})
+                    entrances_to_hint.update({'Pyramid Entrance': 'The extra castle passage'})
                 else:
                     entrances_to_hint.update({'Pyramid Entrance': 'The pyramid ledge'})
         hint_count = 4 if world.shuffle[player] not in ['vanilla', 'dungeonssimple', 'dungeonsfull', 'district', 'swapped'] else 0
@@ -3145,6 +3149,8 @@ def set_inverted_mode(world, player, rom, inverted_buffer):
     # apply inverted map changes
     for b in range(0x00, len(inverted_buffer)):
         rom.write_byte(0x153A70 + b, inverted_buffer[b])
+
+    write_static_map_changes(rom, world, player)
 
 def patch_shuffled_dark_sanc(world, rom, player):
     dark_sanc = world.get_region('Dark Sanctuary Hint', player)
