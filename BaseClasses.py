@@ -1210,19 +1210,19 @@ class CollectionState(object):
         return obtained >= count
 
     def eval_small_key_door(self, door_name, dungeon, player):
-        from Rules import eval_small_key_door_main
+        from .Rules import eval_small_key_door_main
         return eval_small_key_door_main(self, door_name, dungeon, player)
 
     def eval_small_key_door_partial(self, door_name, dungeon, player):
-        from Rules import eval_small_key_door_partial_main
+        from .Rules import eval_small_key_door_partial_main
         return eval_small_key_door_partial_main(self, door_name, dungeon, player)
 
     def eval_small_key_door_strict(self, door_name, dungeon, player):
-        from Rules import eval_small_key_door_strict_main
+        from .Rules import eval_small_key_door_strict_main
         return eval_small_key_door_strict_main(self, door_name, dungeon, player)
 
     def eval_alternative_crystal(self, door_name, dungeon, player):
-        from Rules import eval_alternative_crystal_main
+        from .Rules import eval_alternative_crystal_main
         return eval_alternative_crystal_main(self, door_name, dungeon, player)
 
     def item_is_at(self, location, player, item):

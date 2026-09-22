@@ -596,7 +596,7 @@ def global_rules(world, player):
     set_rule(world.get_entrance('Swamp Hub Hook Path', player), Has('Hookshot', player))
     set_rule(world.get_entrance('Swamp Hub Side Hook Path', player), Has('Hookshot', player))
     set_rule(world.get_location('Swamp Palace - Hookshot Pot Key', player), Has('Hookshot', player))
-    set_rule(world.get_entrance('Swamp Trench 2 Pots Dry', player), or_rule(not_rule(Has('Trench 2 Filled', player))), and_rule(Primitive("can_hit_crystal", player), world.get_entrance("Swamp Crystal Switch SE", 1).access_rule))
+    set_rule(world.get_entrance('Swamp Trench 2 Pots Dry', player), or_rule(not_rule(Has('Trench 2 Filled', player)), and_rule(Primitive("can_hit_crystal", player), world.get_entrance("Swamp Crystal Switch SE", 1).access_rule)))
     set_rule(world.get_entrance('Swamp Trench 2 Pots Wet', player), and_rule(Has('Flippers', player), Has('Trench 2 Filled', player)))
     set_rule(world.get_entrance('Swamp Trench 2 Departure Wet', player), and_rule(Has('Flippers', player), Has('Trench 2 Filled', player)))
     set_rule(world.get_entrance('Swamp West Ledge Hook Path', player), Has('Hookshot', player))

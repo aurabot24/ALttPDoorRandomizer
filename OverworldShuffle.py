@@ -1,4 +1,7 @@
 from collections import OrderedDict, defaultdict
+import copy
+import logging
+
 from .DungeonGenerator import GenerationException
 from .BaseClasses import OWEdge, WorldType, RegionType, Direction, Terrain, PolSlot, Entrance
 from .source.logic.AccessRule import set_rule, and_rule, Has

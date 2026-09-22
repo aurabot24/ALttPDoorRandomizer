@@ -1735,6 +1735,8 @@ def do_mandatory_connections(avail, entrances, cave_options, must_exit):
                                                    or len(candidate) < len(entrances) - required_entrances):
                 if not avail.swapped or (avail.combine_map[exit] not in candidate and not any(e for e in must_exit if avail.combine_map[e] in candidate)): #maybe someday allow these, but we need to disallow mutual locks in Swapped
                     candidates.append(candidate)
+        if not candidates:
+            break
         cave = random.choice(candidates)
 
         if avail.swapped and len(candidates) > 1 and not avail.world.is_tile_swapped(0x03, avail.player):
@@ -1752,7 +1754,6 @@ def do_mandatory_connections(avail, entrances, cave_options, must_exit):
         rnd_cave = list(cave)
         shuffle_connector_exits(rnd_cave)  # should be the same as unbiasing some entrances...
 
-        # TODO: Hardcoded values break doors?
         # If the front and back exits of Turtle Rock are both must-exits, and small keys aren't shuffled, then it's impossible
         # to place the small keys so they are all logically accessible. Thus, only one of the front and back exits can be a must-exit.
         if turtle_rock_could_softlock(avail):
@@ -1847,6 +1848,7 @@ def turtle_rock_could_softlock(avail):
     # to place the small keys so they are all logically accessible. This returns true if that is possible with the current settings.
     simple_drop_shuffle = ["none", "keys"]
     return avail.world.keyshuffle[avail.player] == "none" and \
+           avail.world.doorShuffle == "vanilla" and \
            (not avail.world.potshuffle[avail.player] or avail.world.pottery[avail.player] in simple_drop_shuffle) and \
            avail.world.dropshuffle[avail.player] in simple_drop_shuffle
 

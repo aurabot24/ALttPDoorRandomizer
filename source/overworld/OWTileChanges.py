@@ -16,8 +16,8 @@
 from enum import IntEnum
 from typing import NamedTuple, Optional
 
-from BaseClasses import OWEdge
-from Utils import int16_as_bytes, snes_to_pc
+from ...BaseClasses import OWEdge
+from ...Utils import int16_as_bytes, snes_to_pc
 
 # ---------------------------------------------------------------------------------------------------
 # Addresses / layout

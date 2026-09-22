@@ -1,4 +1,8 @@
-from ... import RaceRandom as random, logging, math, heapq
+import heapq
+import logging
+import math
+
+from ... import RaceRandom as random
 from ...BaseClasses import Entrance, RegionType, Terrain
 from .EntranceShuffle2 import connect_simple
 from ...OWEdges import OWTileRegions
