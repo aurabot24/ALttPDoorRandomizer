@@ -487,6 +487,12 @@ def enemy_vulnerability(world, player, enemy_sprite, region):
                 vulnerability[method] = -1
         elif hits != 0:
             vulnerability[method] = hits
+
+    if world.swords[player] == "swordless":
+        # Can't use medallions to kill enemies without a sword. Ice Palace Bombos logic is handled in swordless_rules
+        for medallion in ["Bombos", "Ether", "Quake"]:
+            if medallion in vulnerability:
+                del vulnerability[medallion]
     return vulnerability
 
 

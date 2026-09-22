@@ -1848,7 +1848,7 @@ def turtle_rock_could_softlock(avail):
     # to place the small keys so they are all logically accessible. This returns true if that is possible with the current settings.
     simple_drop_shuffle = ["none", "keys"]
     return avail.world.keyshuffle[avail.player] == "none" and \
-           avail.world.doorShuffle == "vanilla" and \
+           avail.world.doorShuffle[avail.player] == "vanilla" and \
            (not avail.world.potshuffle[avail.player] or avail.world.pottery[avail.player] in simple_drop_shuffle) and \
            avail.world.dropshuffle[avail.player] in simple_drop_shuffle
 
