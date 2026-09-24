@@ -2063,10 +2063,11 @@ def shuffle_small_key_doors(door_type_pools, used_doors, start_regions_map, all_
                 builder.total_keys = total_keys
             find_small_key_door_candidates(builder, start_regions_map[dungeon], used_doors, world, player)
             custom_doors = 0
-            if all_custom[dungeon]:
-                builder.candidates.small = filter_key_door_pool(builder.candidates.small, all_custom[dungeon])
-                custom_doors = len(custom_key_doors[dungeon])
-                remaining -= custom_doors
+            # Commenting out OWR code which was ironically causing UT to desync from the real multiworld
+            # if all_custom[dungeon]:
+            #     builder.candidates.small = filter_key_door_pool(builder.candidates.small, all_custom[dungeon])
+            #     custom_doors = len(custom_key_doors[dungeon])
+            #     remaining -= custom_doors
             builder.key_doors_num = max(0, len(builder.candidates.small) - builder.key_drop_cnt) + custom_doors
             total_keys -= builder.key_drop_cnt
             ttl += builder.key_doors_num
