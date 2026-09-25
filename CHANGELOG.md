@@ -1,5 +1,10 @@
 # Changelog
 
+# 0.8.0.1
+- \~Merged in DR v1.5.7~
+  - Static Key Logic
+- Fixed issue with bunny walking logic
+
 # 0.8.0.0
 - Implemented new balanced flute shuffle algorithm
 - New OW map check tile gfx for Grid OW Layout

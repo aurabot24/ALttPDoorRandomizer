@@ -1120,6 +1120,7 @@ def patch_rom(world, rom, player, team, is_mystery=False, rom_header=None, hint_
     # saved fish prize
     rom.write_byte(0xE82CC, world.prizes[player]['fish'])
 
+
     # fill enemy prize packs
     rom.write_bytes(0x37A78, world.prizes[player]['enemies'])
 
@@ -1642,6 +1643,11 @@ def patch_rom(world, rom, player, team, is_mystery=False, rom_header=None, hint_
     rom.write_byte(0x180020, digging_game_rng)
     rom.write_byte(0xEFD95, digging_game_rng)
     glitches_enabled = world.logic[player] in ['owglitches', 'hybridglitches', 'nologic']
+
+    # record number of digs for spoiler log
+    player_name = '' if world.players == 1 else str(' (' + world.get_player_names(player) + ')')
+    world.spoiler.dig_game_digs[player_name] = digging_game_rng
+
     rom.write_byte(0x1800A3, 0x01)  # enable correct world setting behaviour after agahnim kills
     rom.write_byte(0x1800A4, 0x01 if not glitches_enabled else 0x00)  # enable POD EG fix
     rom.write_byte(0x180042, 0x01 if world.save_and_quit_from_boss else 0x00)  # Allow Save and Quit after boss kill
@@ -1684,7 +1690,9 @@ def patch_rom(world, rom, player, team, is_mystery=False, rom_header=None, hint_
             rom.write_bytes(0x180188, [0x80, 0, 0])  # Zelda respawn refills (magic, bombs, arrows)
             rom.write_bytes(0x18018B, [0x80, 0, 0])  # Mantle respawn refills (magic, bombs, arrows)
             magic_max = 0x80
-        if world.doorShuffle[player] not in ['vanilla', 'basic']:
+        # enemized escapes can logically need a bow or magic that the uncle item didn't supply
+        enemized_vanilla = world.doorShuffle[player] == 'vanilla' and world.enemy_shuffle[player] != 'none'
+        if world.doorShuffle[player] not in ['vanilla', 'basic'] or enemized_vanilla:
             # Uncle respawn refills (magic, bombs, arrows)
             rom.write_bytes(0x180185, [max(magic_small, magic_max), max(bomb_small, bomb_max), max(bow_small, bow_max)])
             # Zelda respawn refills (magic, bombs, arrows)
@@ -2380,7 +2388,7 @@ def write_strings(rom, world, player, team, multiworld_hint_text={}):
             "    Winners\n{HARP}\n"
             "    ~~~2025~~~\n      humbugh\n\n"
             "    ~~~2024~~~\n    Gammachuu\n\n"
-            "    ~~~2023~~~\n    WallKicks\n\n"            
+            "    ~~~2023~~~\n    WallKicks\n\n"
             "    ~~~2022~~~\n     Schulzer\n\n"
             "    ~~~2021~~~\n      Goomba\n\n"
             "    ~~~2020~~~\n    Linlinlin\n\n"
@@ -2779,7 +2787,12 @@ def write_strings(rom, world, player, team, multiworld_hint_text={}):
 
     # this is what shows after getting the green pendant item in rando
     tt['sahasrahla_quest_have_master_sword'] = Sahasrahla2_texts[random.randint(0, len(Sahasrahla2_texts) - 1)]
-    tt['blind_by_the_light'] = Blind_texts[random.randint(0, len(Blind_texts) - 1)]
+    blind_by_the_light_text = Blind_texts[random.randint(0, len(Blind_texts) - 1)]
+    tt['blind_by_the_light'] = blind_by_the_light_text
+    player_name = '' if world.players == 1 else str(' (' + world.get_player_names(player) + ')')
+    world.spoiler.ingame_texts[player_name] = {
+        'Blind Pun': str(blind_by_the_light_text).replace('\n', ' ')
+    }
 
     if world.goal[player] in ['triforcehunt']:
         tt['ganon_fall_in_alt'] = 'Why are you even here?\n You can\'t even hurt me! Get the Triforce Pieces.'

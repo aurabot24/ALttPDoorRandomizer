@@ -1460,3 +1460,46 @@ def set_prize_drops(world, player):
     world.prizes[player]['fish'] = prizes.pop()
 
     world.prizes[player]['enemies'] = prizes
+
+    # Names for the spoiler. Bytes above are what the ROM write uses.
+    byte_to_prize = {code: name for name, code in possible_prizes.items()}
+    chosen = world.prizes[player]
+    player_name = '' if world.players == 1 else f' ({world.get_player_names(player)})'
+    world.spoiler.drops[f'Drops{player_name}'] = {
+        'PullTree': {
+            'Tier1': byte_to_prize[chosen['pull'][0]],
+            'Tier2': byte_to_prize[chosen['pull'][1]],
+            'Tier3': byte_to_prize[chosen['pull'][2]],
+        },
+        'RupeeCrab': {
+            'Main': byte_to_prize[chosen['crab'][0]],
+            'Final': byte_to_prize[chosen['crab'][1]],
+        },
+        'Stun': byte_to_prize[chosen['stun']],
+        'FishSave': byte_to_prize[chosen['fish']],
+    }
+    packs = {}
+    for group_index in range(7):
+        sprites = [byte_to_prize[code] for code in chosen['enemies'][group_index * 8:(group_index + 1) * 8]]
+        packs[f'EnemyGroup{group_index + 1}'] = {
+            'PrizePackName': get_prize_pack_name(sprites),
+            'DropOrder': ', '.join(sprites),
+        }
+    world.spoiler.prize_packs[f'PrizePacks{player_name}'] = packs
+
+def get_prize_pack_name(prize_pack_set):
+    if prize_pack_set[0] == "Small Heart":  # Heart
+        if prize_pack_set[1] == "Fairy":  # Fairy
+            return "LargeVarietyPack"
+        return "HeartsPack"
+    if prize_pack_set[0] == "Rupees (5)":  # RupeeBlue
+        return "RupeesPack"
+    if prize_pack_set[0] == "Single Bomb":  # BombRefill1
+        return "BombsPack"
+    if prize_pack_set[0] == "Small Magic":  # MagicRefillSmall
+        return "SmallVarietyPack"
+    if prize_pack_set[0] == "Big Magic":  # MagicRefillFull
+        return "MagicPack"
+    if prize_pack_set[0] == "Arrows (5)":  # ArrowRefill5
+        return "ArrowsPack"
+    return "Unknown"

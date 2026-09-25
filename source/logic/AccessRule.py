@@ -41,7 +41,8 @@ class AccessRule(object):
 
         Empty means always true. A is easier than B when every normalized
         atom of A is in B at an equal or higher count (see requirement_easier).
-        OR contributes only atoms present on every branch (no DNF expand).
+        An OR keeps atoms shared by every branch, plus one blob for the choice.
+        The blob stops a disjoint OR from looking easier than another path.
         Opaque leaves stay unique by id until they are converted.
         """
         return frozenset({('opaque', id(self))})
@@ -254,23 +255,23 @@ class OrRule(AccessRule):
         return _compile_or(self.rules)
 
     def atoms(self):
-        # Necessary atoms only: intersection of the branches. Disjoint
-        # alternatives (vanilla | clip) add nothing, so they do not block
-        # dominance the way a unique OR blob did. FALSE branches are ignored.
-        necessary = None
+        # Atoms present on every usable branch are real requirements, so
+        # 1 key on every branch still outranks 3 keys. The remaining choice
+        # is one blob. Boots-or-hookshot must not look easier than another path.
+        branches = []
         for rule in self.rules:
             child = rule.atoms()
             if ('false',) in child:
                 continue
-            if necessary is None:
-                necessary = child
-            else:
-                necessary &= child
-            if not necessary:
-                return frozenset()
-        if necessary is None:
+            branches.append(child)
+        if not branches:
             return frozenset({('false',)})
-        return necessary
+        if len(branches) == 1:
+            return branches[0]
+        necessary = branches[0]
+        for child in branches[1:]:
+            necessary &= child
+        return necessary | frozenset({('or', frozenset(branches))})
 
     def __str__(self):
         return '(' + ' or '.join(str(r) for r in self.rules) + ')'

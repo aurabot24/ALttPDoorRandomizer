@@ -3037,6 +3037,10 @@ class Spoiler(object):
         self.lobbies = {}
         self.medallions = {}
         self.bottles = {}
+        self.drops = {}
+        self.dig_game_digs = {}
+        self.prize_packs = {}
+        self.ingame_texts = {}        
         self.playthrough = {}
         self.unreachables = []
         self.startinventory = []
@@ -3303,6 +3307,10 @@ class Spoiler(object):
         out['Starting Inventory'] = self.startinventory
         out['Special'] = self.medallions
         out['Bottles'] = self.bottles
+        out['Drops'] = self.drops
+        out['Dig Game Digs'] = self.dig_game_digs
+        out['Prize Packs'] = self.prize_packs
+        out['In-Game Texts'] = self.ingame_texts        
         if self.hashes:
             out['Hashes'] = {f"{self.world.player_names[player][team]} (Team {team + 1})": hash for (player, team), hash in self.hashes.items()}
         if self.shops:
@@ -3616,6 +3624,39 @@ class Spoiler(object):
                     for idx, sprite in enumerate(sprite_list):
                         outfile.write(f'{hex(area)} Enemy #{idx + 1}{player_tag}: {str(sprite)}\n')
 
+            # drops, prize packs and in-game text are recorded while patching the rom, so they are absent
+            # when the rom is suppressed
+            if self.drops:
+                outfile.write('\n\nDrops:\n\n')
+                for player in range(1, self.world.players + 1):
+                    player_name = '' if self.world.players == 1 else str(' (' + self.world.get_player_names(player) + ')')
+                    player_drops = self.drops[f'Drops{player_name}']
+                    outfile.write(f'Tree Pull Tier 1{player_name}: {player_drops["PullTree"]["Tier1"]}\n')
+                    outfile.write(f'Tree Pull Tier 2{player_name}: {player_drops["PullTree"]["Tier2"]}\n')
+                    outfile.write(f'Tree Pull Tier 3{player_name}: {player_drops["PullTree"]["Tier3"]}\n')
+                    outfile.write(f'Rupee Crab Main{player_name}: {player_drops["RupeeCrab"]["Main"]}\n')
+                    outfile.write(f'Rupee Crab Final{player_name}: {player_drops["RupeeCrab"]["Final"]}\n')
+                    outfile.write(f'Stun Prize{player_name}: {player_drops["Stun"]}\n')
+                    outfile.write(f'Fish Save Prize{player_name}: {player_drops["FishSave"]}\n')
+                    outfile.write(f'Digging Game Digs{player_name}: {self.dig_game_digs[player_name]}\n')
+
+            if self.prize_packs:
+                outfile.write('\n\nPrize Packs:\n\n')
+                for player in range(1, self.world.players + 1):
+                    player_name = '' if self.world.players == 1 else str(' (' + self.world.get_player_names(player) + ')')
+                    player_prize_packs = self.prize_packs[f'PrizePacks{player_name}']
+                    for enemy_group, prize_pack_info in player_prize_packs.items():
+                        outfile.write(f'{enemy_group}{player_name}: {prize_pack_info["PrizePackName"]}\n'
+                                      f'Drop Order{player_name}: {prize_pack_info["DropOrder"]}\n')
+
+            if self.ingame_texts:
+                outfile.write('\n\nIn-Game Text:\n\n')
+                for player in range(1, self.world.players + 1):
+                    player_name = '' if self.world.players == 1 else str(' (' + self.world.get_player_names(player) + ')')
+                    player_ingame_text = self.ingame_texts[f'{player_name}']
+                    for game_text_type, game_text_value in player_ingame_text.items():
+                        outfile.write(f'{game_text_type}{player_name}: {game_text_value}\n')
+
     def playthrough_to_file(self, filename):
         with open(filename, 'a') as outfile:
             # locations: Change up location names; in the instance of a location with multiple sections, it'll try to translate the room name
@@ -3823,7 +3864,7 @@ prizeshuffle_mode = {'none': 0, 'dungeon': 1, 'nearby': 2, 'wild': 3}
 # byte 14: POOT TKKK (pseudoboots, overworld_map, trap_door_mode, key_logic_algo)
 overworld_map_mode = {'default': 0, 'compass': 1, 'map': 2}
 trap_door_mode = {'vanilla': 0, 'optional': 1, 'boss': 2, 'oneway': 3}
-key_logic_algo = {'dangerous': 0, 'partial': 1, 'strict': 2}
+key_logic_algo = {'dangerous': 0, 'partial': 1, 'strict': 2, 'static': 3}
 
 # byte 15: SSLL M?DD (skullwoods, linked_drops, mirrorscroll, 1 free byte, door_type)
 skullwoods_mode = {'original': 0, 'restricted': 1, 'loose': 2, 'followlinked': 3}
