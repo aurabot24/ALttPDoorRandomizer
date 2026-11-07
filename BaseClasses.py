@@ -120,6 +120,7 @@ class World(object):
         self.damage_table = {}
         # district + nearby: dungeon names whose nearby items are forced in-dungeon
         self.district_nearby_forced_inside = defaultdict(set)
+        self.scams = {}
 
 
         for player in range(1, players + 1):
@@ -221,6 +222,8 @@ class World(object):
             set_player_attr('exp_cache', defaultdict(dict))
             set_player_attr('enabled_entrances', {})
             set_player_attr('data_tables', None)
+
+            set_player_attr('scams', False)
 
     def finish_init(self):
         for player in range(1, self.players + 1):

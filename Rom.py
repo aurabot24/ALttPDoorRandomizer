@@ -2581,14 +2581,15 @@ def write_strings(rom, world, player, team, multiworld_hint_text={}):
                 hint += f" for {world.player_names[dest.player][team]}"
         return hint
 
-    zoraitem = world.get_location('King Zora', player).item.hint_text
-    if len(zoraitem) <= 15:
-        tt['zora_meeting'] = f"Whaddaya want?\n  ≥ {zoraitem.title()}\n    Nothin'{{CHOICE}}"
-    else:
-        tt['zora_meeting'] = f"Do you want {zoraitem}?\n  ≥ I'll pay\n    No thanks{{CHOICE}}"
+    if not world.scams[player]:
+        zoraitem = world.get_location('King Zora', player).item.hint_text
+        if len(zoraitem) <= 15:
+            tt['zora_meeting'] = f"Whaddaya want?\n  ≥ {zoraitem.title()}\n    Nothin'{{CHOICE}}"
+        else:
+            tt['zora_meeting'] = f"Do you want {zoraitem}?\n  ≥ I'll pay\n    No thanks{{CHOICE}}"
 
-    bottleitem = world.get_location('Bottle Merchant', player).item.hint_text
-    tt['bottle_vendor_choice'] = f"Do you want {bottleitem}?\n  ≥ I'll take it\n    No thanks!\n{{CHOICE}}"
+        bottleitem = world.get_location('Bottle Merchant', player).item.hint_text
+        tt['bottle_vendor_choice'] = f"Do you want {bottleitem}?\n  ≥ I'll take it\n    No thanks!\n{{CHOICE}}"
 
     # For hints, first we write hints about entrances, some from the inconvenient list others from all reasonable entrances.
     if world.hints[player]:
