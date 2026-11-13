@@ -575,8 +575,6 @@ def randomize_enemies(world, player):
                         if sprite.kind == EnemySprite.Wallmaster:
                             sprite.sub_type = 0x07  # Overlord
 
-        for i, sprites in data_tables.uw_enemy_table.room_map.items():
-            print(f"{i}: {', '.join([str(sprite.kind) for sprite in sprites])}")
         randomize_overworld_enemies(data_tables, custom_ow)
         # fix thief stats
         # subclass_table = world.damage_table[player].damage_table['SubClassTable']
